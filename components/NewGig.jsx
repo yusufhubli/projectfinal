@@ -1,118 +1,676 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import { AiOutlinePlus } from 'react-icons/ai'
-const NewGig = () => {
+import axios from 'axios'
+
+
+
+const NewGig = ({ userId }) => {
+  console.log('newgig', userId)
+  const [gig, setGig] = useState({
+    cardname: "",
+    description: "",
+    servicetype: "",
+    images: "",
+    plans: {
+      basic: {
+        planname: "",
+        description: "",
+        delivery: "",
+        revision: "",
+        price: "",
+      },
+      standard: {
+        planname: "",
+        description: "",
+        delivery: "",
+        revision: "",
+        price: "",
+      },
+      premium: {
+        planname: "",
+        description: "",
+        delivery: "",
+        revision: "",
+        price: "",
+      },
+
+    },
+    sellerId: userId,
+
+  })
+
+  const handleInputChange = async (e) => {
+    const { name, value, files } = e.target;
+
+    // If the name contains a dot (.), it's a nested property
+    if (name.includes('.')) {
+      const keys = name.split('.');
+      const updatedData = await updateDeepGigData(gig, keys, value, files);
+      setGig(updatedData);
+    } else {
+      if (files && files.length) {
+        const file = files[0];
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+          setGig((prevGig) => ({
+            ...prevGig,
+            [name]: reader.result,
+          }));
+        };
+
+        reader.readAsDataURL(file);
+      } else {
+        setGig((prevGig) => ({
+          ...prevGig,
+          [name]: value,
+        }));
+      }
+    }
+  };
+
+
+
+
+
+  const updateDeepGigData = (data, keys, value, files) => {
+    const [currentKey, ...restKeys] = keys;
+
+    if (keys.length === 1) {
+      if (files && files.length) {
+        const file = files[0];
+        const reader = new FileReader();
+
+        return new Promise((resolve) => {
+          reader.onloadend = () => {
+            resolve({
+              ...data,
+              [currentKey]: reader.result,
+            });
+          };
+          reader.readAsDataURL(file);
+        });
+      } else {
+        return Promise.resolve({
+          ...data,
+          [currentKey]: value,
+        });
+      }
+    } else {
+      const currentData = data[currentKey] || {};
+
+      return updateDeepGigData(currentData, restKeys, value, files).then((updatedData) => ({
+        ...data,
+        [currentKey]: updatedData,
+      }));
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:3000/api/createcard", gig)
+      console.log(res.data)
+    } catch (error) {
+      console.log(error)
+    }
+
+    // Do something with the gig object, for example, submit it to a server or use it in some other way.
+    //console.log(gig);
+  };
+
+
+  let num = 0
+  //console.log(gig)
+  let slide = ["static-div", "first-div", "second-div", "third-div"]
+  const next = () => {
+    const div = document.getElementById("gig")
+    num++
+    if (num < slide.length) {
+      div.classList.add(slide[num])
+    }
+    console.log(num)
+  }
+  const back = () => {
+    const div = document.getElementById("gig")
+    div.classList.remove(slide[num])
+    num--
+    if (num > 0) {
+      div.classList.add(slide[num])
+    }
+    console.log(num)
+  }
   return (
-    <div className=' bg-white w-[850px] h-auto mx-6 my-4 py-8 rounded-md shadow-sm shadow-purple-400'>
-      <h1 className='text-purple-700 font-bold text-center m-4 text-2xl'>Create Gig</h1>
+    <div className=' bg-white w-[850px] h-auto overflow-hidden mx-6 my-4 py-8 rounded-md shadow-sm shadow-purple-400'>
+      <form onSubmit={handleSubmit}>
+        <div id='gig' className='w-[3400px] flex '>
+          {/* first div */}
+          <div className=' w-[850px] h-auto'>
+            <h1 className='text-purple-700 font-bold text-center mb-2 text-xl'>Create Gig</h1>
 
-      <div className='ml-32 pl-1 '>
-        <h4 className='font-bold my-2 text-purple-700'>Gig Name</h4>
-        <input type="text" className=' w-4/5 bg-purple-50 mb-2 rounded-md outline-none border-2 border-purple-600 p-1' />
-      </div>
+            <div className='ml-32 pl-1 '>
+              <h4 className='font-bold my-2 text-[12px] text-purple-700'>Gig Name</h4>
+              <input type="text"
+                name='cardname'
+                value={gig.cardname}
+                onChange={handleInputChange}
+                className=' w-4/5 text-sm bg-purple-50 mb-1 rounded-md outline-none border-2 border-purple-600 p-1' />
+            </div>
 
-      <div className='ml-32 pl-1 '>
-        <h4 className='font-bold my-2 text-purple-700'>Description</h4>
-        <textarea rows={6} type="text" className=' w-4/5 outline-none bg-purple-50 mb-2 rounded-md border-2 p-1 border-purple-600 ' />
-      </div>
-      <div className='ml-32 pl-1'>
-        <select name="" id="" className=' w-4/5 outline-none bg-purple-50 my-2 rounded-md text-purple-700 border-2 border-purple-700 p-1'>
-          <option value="" className='font-bold'>Name</option>
-          <option value="">name</option>
-          <option value="">name</option>
-          <option value="">name</option>
-          <option value="">name</option>
-        </select>
-      </div>
+            <div className='ml-32 pl-1 '>
+              <h4 className='font-bold my-2 text-[13px] text-purple-700'>Description</h4>
+              <textarea rows={4} type="text"
+                name='description'
+                value={gig.description}
+                onChange={handleInputChange}
+                className=' w-4/5 outline-none text-sm bg-purple-50 mb-1 rounded-md border-2 p-1 border-purple-600 ' />
+            </div>
+            <div className='ml-32 pl-1'>
+              <select name="servicetype" id="" value={gig.servicetype} onChange={handleInputChange} className=' w-4/5 outline-none bg-purple-50 my-2 text-sm rounded-md text-purple-700 border-2 border-purple-700 p-1'>
+                <option value="web development">web development</option>
+                <option value="app development">app development</option>
+                <option value="web design">web design</option>
+                <option value="software development">software development</option>
+              </select>
+            </div>
+            <div className='flex ml-32 pl-3 my-2'>
+              <div className=' relative border-2 border-purple-700 bg-purple-50 rounded-md w-40 h-24 ml-4 '>
+                <h5 className=' absolute text-sm font-sans font-bold text-purple-700 m-1'>Add Image</h5>
+                <AiOutlinePlus size={45} className=' text-purple-700 absolute left-14 top-7' />
+                <input type="file" name="images" onChange={handleInputChange} accept='image/*' className=' absolute top-9 opacity-0' id="" />
+              </div>
+              {/* <div className=' relative border-2 border-purple-700 bg-purple-50 rounded-md w-40 h-24 ml-4 '>
+              <h5 className=' absolute text-sm font-sans font-bold text-purple-700 m-1'>Add Image</h5>
+              <AiOutlinePlus size={45} className=' text-purple-700 absolute left-14 top-7' />
+              <input type="file" name="" className=' absolute top-9 opacity-0' id="" />
+            </div>
+            <div className=' relative border-2 border-purple-700 bg-purple-50 rounded-md w-40 h-24 ml-4 '>
+              <h5 className=' absolute text-sm font-sans font-bold text-purple-700 m-1'>Add Image</h5>
+              <AiOutlinePlus size={45} className=' text-purple-700 absolute left-14 top-7' />
+              <input type="file" name="" className=' absolute top-9 opacity-0' id="" />
+            </div> */}
+            </div>
+            <div className=' w-[850px] flex justify-end pr-10'>
+              <section onClick={next} className=' text-sm font-medium rounded-sm text-white bg-purple-700 hover:bg-purple-600 py-1 px-6  shadow-sm shadow-gray-500'>Next</section>
+            </div>
+          </div>
+          {/* second div */}
+          <div className=' w-[850px] h-auto'>
+            <div className=' py-1'>
+              <h1 className='text-lg font-bold text-center my-4 text-purple-700'>Basic Plan</h1>
+              <div className='ml-32 pl-1'>
+                <input type="text"
+                  name="plans.basic.planname"
+                  value={gig.plans.basic.planname}
+                  onChange={handleInputChange}
+                  placeholder='Plan Name' className='w-4/5 bg-purple-50 mb-2 rounded-md outline-none border-2 border-purple-700 text-sm p-1 placeholder:text-purple-500' />
+                <textarea name="plans.basic.description" id=""
+                  value={gig.plans.basic.description}
+                  onChange={handleInputChange}
+                  className='w-4/5 bg-purple-50 mb-2 text-sm rounded-md outline-none border-2 border-purple-700 p-1 my-2 placeholder:text-purple-500' cols="30" rows="4" placeholder={`Plan Description (list manner)`} />
+                <div className='my-1 flex'>
+                  <div>
+                    <h4 className='font-bold my-2 text-[13px] text-purple-700'>Delivery</h4>
+                    <input type='text'
+                      name='plans.basic.delivery'
+                      value={gig.plans.basic.delivery}
+                      onChange={handleInputChange}
+                      className=' bg-purple-50 mb-2 text-sm rounded-md outline-none border-2 w-64 border-purple-700 p-1 font-bold' />
+                  </div>
+                  <div>
+                    <h4 className='font-bold ml-14 my-2 text-[13px] text-purple-700'>Revisions</h4>
+                    <input type="text"
+                      name='plans.basic.revision'
+                      value={gig.plans.basic.revision}
+                      onChange={handleInputChange}
+                      className=' bg-purple-50 w-64 mb-2 ml-14 text-sm rounded-md outline-none border-2 border-purple-700 p-1 placeholder:text-purple-700' />
+                  </div>
+                </div>
+                <div className='my-2'>
+                  <h4 className='font-bold my-2 text-[13px] text-purple-700'>Price</h4>
+                  <input type="text"
+                    name='plans.basic.price'
+                    value={gig.plans.basic.price}
+                    onChange={handleInputChange}
+                    className=' text-sm bg-purple-50 w-64 mb-2 rounded-md outline-none border-2 border-purple-700 p-1 placeholder:text-purple-700' />
+                </div>
+              </div>
+            </div>
+            <div className=' w-[850px] flex justify-between px-10'>
+              <section onClick={back} className=' text-sm font-medium rounded-sm text-white bg-purple-700 hover:bg-purple-600 py-1 px-6  shadow-sm shadow-gray-500'>Back</section>
+              <section onClick={next} className=' text-sm font-medium rounded-sm text-white bg-purple-700 hover:bg-purple-600 py-1 px-6  shadow-sm shadow-gray-500'>Next</section>
+            </div>
+          </div>
+          {/* third div */}
+          <div className=' w-[850px] h-auto'>
+            <div className=' py-1'>
+              <h1 className='text-lg font-bold text-center my-4 text-purple-700'>Standard Plan</h1>
+              <div className='ml-32 pl-1'>
+                <input type="text"
+                  name='plans.standard.planname'
+                  value={gig.plans.standard.planname}
+                  onChange={handleInputChange}
+                  placeholder='Plan Name' className='w-4/5 bg-purple-50 mb-2 rounded-md outline-none border-2 border-purple-700 text-sm p-1 placeholder:text-purple-500' />
+                <textarea name="plans.standard.description" id=""
+                  value={gig.plans.standard.description}
+                  onChange={handleInputChange}
+                  className='w-4/5 bg-purple-50 mb-2 text-sm rounded-md outline-none border-2 border-purple-700 p-1 my-2 placeholder:text-purple-500' cols="30" rows="4" placeholder={`Plan Description (list manner)`} />
+                <div className='my-1 flex'>
+                  <div>
+                    <h4 className='font-bold my-2 text-[13px] text-purple-700'>Delivery</h4>
+                    <input type='text'
+                      name='plans.standard.delivery'
+                      value={gig.plans.standard.delivery}
+                      onChange={handleInputChange}
+                      className=' bg-purple-50 mb-2 text-sm rounded-md outline-none border-2 w-64 border-purple-700 p-1 font-bold' />
+                  </div>
+                  <div>
+                    <h4 className='font-bold ml-14 my-2 text-[13px] text-purple-700'>Revisions</h4>
+                    <input type="text"
+                      name='plans.standard.revision'
+                      value={gig.plans.standard.revision}
+                      onChange={handleInputChange}
+                      className=' bg-purple-50 w-64 mb-2 ml-14 text-sm rounded-md outline-none border-2 border-purple-700 p-1 placeholder:text-purple-700' />
+                  </div>
+                </div>
+                <div className='my-2'>
+                  <h4 className='font-bold my-2 text-[13px] text-purple-700'>Price</h4>
+                  <input type="text"
+                    name='plans.standard.price'
+                    value={gig.plans.standard.price}
+                    onChange={handleInputChange}
+                    className=' text-sm bg-purple-50 w-64 mb-2 rounded-md outline-none border-2 border-purple-700 p-1 placeholder:text-purple-700' />
+                </div>
+              </div>
+            </div>
+            <div className=' w-[850px] flex justify-between px-10'>
+              <section onClick={back} className=' text-sm font-medium rounded-sm text-white bg-purple-700 hover:bg-purple-600 py-1 px-6  shadow-sm shadow-gray-500'>Back</section>
+              <section onClick={next} className=' text-sm font-medium rounded-sm text-white bg-purple-700 hover:bg-purple-600 py-1 px-6  shadow-sm shadow-gray-500'>Next</section>
+            </div>
+          </div>
+          {/* forth div */}
+          <div className=' w-[850px] h-auto'>
+            <div className=' py-1'>
+              <h1 className='text-lg font-bold text-center my-4 text-purple-700'>Premium Plan</h1>
+              <div className='ml-32 pl-1'>
+                <input type="text"
+                  name='plans.premium.planname'
+                  value={gig.plans.premium.planname}
+                  onChange={handleInputChange}
+                  placeholder='Plan Name' className='w-4/5 bg-purple-50 mb-2 rounded-md outline-none border-2 border-purple-700 text-sm p-1 placeholder:text-purple-500' />
+                <textarea name="plans.premium.description" id=""
+                  value={gig.plans.premium.description}
+                  onChange={handleInputChange}
+                  className='w-4/5 bg-purple-50 mb-2 text-sm rounded-md outline-none border-2 border-purple-700 p-1 my-2 placeholder:text-purple-500' cols="30" rows="4" placeholder={`Plan Description (list manner)`} />
+                <div className='my-1 flex'>
+                  <div>
+                    <h4 className='font-bold my-2 text-[13px] text-purple-700'>Delivery</h4>
+                    <input type='text'
+                      name='plans.premium.delivery'
+                      value={gig.plans.premium.delivery}
+                      onChange={handleInputChange}
+                      className=' bg-purple-50 mb-2 text-sm rounded-md outline-none border-2 w-64 border-purple-700 p-1 font-bold' />
+                  </div>
+                  <div>
+                    <h4 className='font-bold ml-14 my-2 text-[13px] text-purple-700'>Revisions</h4>
+                    <input type="text"
+                      name='plans.premium.revision'
+                      value={gig.plans.premium.revision}
+                      onChange={handleInputChange}
+                      className=' bg-purple-50 w-64 mb-2 ml-14 text-sm rounded-md outline-none border-2 border-purple-700 p-1 placeholder:text-purple-700' />
+                  </div>
+                </div>
+                <div className='my-2'>
+                  <h4 className='font-bold my-2 text-[13px] text-purple-700'>Price</h4>
+                  <input type="text"
+                    name='plans.premium.price'
+                    value={gig.plans.premium.price}
+                    onChange={handleInputChange}
+                    className=' text-sm bg-purple-50 w-64 mb-2 rounded-md outline-none border-2 border-purple-700 p-1 placeholder:text-purple-700' />
+                </div>
+              </div>
+            </div>
+            <div className=' w-[850px] flex justify-between px-10'>
+              <section onClick={back} className=' text-sm font-medium rounded-sm text-white bg-purple-700 hover:bg-purple-600 py-1 px-6  shadow-sm shadow-gray-500'>Back</section>
+              <button type='submit' className=' text-sm font-medium rounded-sm text-white bg-purple-700 hover:bg-purple-600 py-1 px-6  shadow-sm shadow-gray-500'>Create</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  )
+}
 
-      <div className='flex ml-32 pl-3 my-2'>
-        <div className=' relative border-2 border-purple-700 bg-purple-50 rounded-md w-40 h-24 ml-4 '>
-          <h5 className=' absolute text-sm font-sans font-bold text-purple-700 m-1'>Add Image</h5>
-          <AiOutlinePlus size={45} className=' text-purple-700 absolute left-14 top-7' />
-          <input type="file" name="" className=' absolute top-9 opacity-0' id="" />
-        </div>
-        <div className=' relative border-2 border-purple-700 bg-purple-50 rounded-md w-40 h-24 ml-4 '>
-          <h5 className=' absolute text-sm font-sans font-bold text-purple-700 m-1'>Add Image</h5>
-          <AiOutlinePlus size={45} className=' text-purple-700 absolute left-14 top-7' />
-          <input type="file" name="" className=' absolute top-9 opacity-0' id="" />
-        </div>
-        <div className=' relative border-2 border-purple-700 bg-purple-50 rounded-md w-40 h-24 ml-4 '>
-          <h5 className=' absolute text-sm font-sans font-bold text-purple-700 m-1'>Add Image</h5>
-          <AiOutlinePlus size={45} className=' text-purple-700 absolute left-14 top-7' />
-          <input type="file" name="" className=' absolute top-9 opacity-0' id="" />
-        </div>
-      </div>
-      <div className=' bg-purple-400 mt-8 py-1'>
-        <h1 className='text-lg font-bold text-center my-4 text-white'>Basic Plan</h1>
-        <div className='ml-32 pl-1'>
-          <input type="text" placeholder='Plan Name' className='w-4/5 bg-purple-50 mb-2 rounded-md outline-none border-2 border-purple-50 p-1 placeholder:text-purple-500' />
-          <textarea name="" id="" className='w-4/5 bg-purple-50 mb-2 rounded-md outline-none border-2 border-purple-50 p-1 my-2 placeholder:text-purple-500' cols="30" rows="5" placeholder={`Plan Description (list manner)`} />
-          <div className='my-1'>
-            <h4 className='font-bold my-2 text-purple-50'>Revisions</h4>
-            <select name="" id="" className=' bg-purple-50 mb-2 rounded-md outline-none border-2 w-64 border-purple-50 p-1 font-bold text-purple-400'>
-              <option value="">0</option>
-              <option value="">1</option>
-              <option value="">2</option>
-              <option value="">3</option>
-            </select><input type="text" placeholder='Price' className=' bg-purple-50 w-64 mb-2 ml-14 rounded-md outline-none border-2 border-purple-50 p-1 placeholder:text-purple-500' />
-          </div>
-          <div className='my-2'>
-            <h4 className='font-bold my-2 text-purple-50'>Extra Revisions</h4>
-            <select name="" id="" className=' bg-purple-50 mb-2 rounded-md outline-none border-2 w-64 border-purple-50 p-1 font-bold text-purple-400'>
-              <option value="">1</option>
-            </select><input type="text" placeholder='Extra Price' className=' bg-purple-50 w-64 mb-2 ml-14 rounded-md outline-none border-2 border-purple-50 p-1 placeholder:text-purple-600' />
-          </div>
-        </div>
-      </div>
+export const UpdateGig = ({ card }) => {
+  console.log('updategig', card._id)
+  const [gig, setGig] = useState({
+    cardname: card.cardname,
+    description: card.description,
+    servicetype: card.servicetype,
+    images: card.images,
+    plans: {
+      basic: {
+        planname: card.plans.basic.planname,
+        description: card.plans.basic.description,
+        delivery: card.plans.basic.delivery,
+        revision: card.plans.basic.revision,
+        price: card.plans.basic.price,
+      },
+      standard: {
+        planname: card.plans.standard.planname,
+        description: card.plans.standard.description,
+        delivery: card.plans.standard.delivery,
+        revision: card.plans.standard.revision,
+        price: card.plans.standard.price,
+      },
+      premium: {
+        planname: card.plans.premium.planname,
+        description: card.plans.premium.description,
+        delivery: card.plans.premium.delivery,
+        revision: card.plans.premium.revision,
+        price: card.plans.premium.price,
+      },
 
-      <div className=' bg-purple-600 py-1'>
-        <h1 className='text-lg font-bold text-center my-4 text-white'>Standard Plan</h1>
-        <div className='ml-32 pl-1'>
-          <input type="text" placeholder='Plan Name' className='w-4/5 bg-purple-50 mb-2 rounded-md outline-none border-2 border-purple-50 p-1 placeholder:text-purple-500' />
-          <textarea name="" id="" className='w-4/5 bg-purple-50 mb-2 rounded-md outline-none border-2 border-purple-50 p-1 my-2 placeholder:text-purple-500' cols="30" rows="5" placeholder={`Plan Description (list manner)`} />
-          <div className='my-1'>
-            <h4 className='font-bold my-2 text-purple-50'>Revisions</h4>
-            <select name="" id="" className=' bg-purple-50 mb-2 rounded-md outline-none border-2 w-64 border-purple-50 p-1 font-bold text-purple-600'>
-              <option value="">0</option>
-              <option value="">1</option>
-              <option value="">2</option>
-              <option value="">3</option>
-            </select><input type="text" placeholder='Price' className=' bg-purple-50 w-64 mb-2 ml-14 rounded-md outline-none border-2 border-purple-50 p-1 placeholder:text-purple-600 font-medium' />
+    },
+    sellerId: card.sellerId._id,
+
+  })
+
+  const handleInputChange = async (e) => {
+    const { name, value, files } = e.target;
+
+    // If the name contains a dot (.), it's a nested property
+    if (name.includes('.')) {
+      const keys = name.split('.');
+      const updatedData = await updateDeepGigData(gig, keys, value, files);
+      setGig(updatedData);
+    } else {
+      if (files && files.length) {
+        const file = files[0];
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+          setGig((prevGig) => ({
+            ...prevGig,
+            [name]: reader.result,
+          }));
+        };
+
+        reader.readAsDataURL(file);
+      } else {
+        setGig((prevGig) => ({
+          ...prevGig,
+          [name]: value,
+        }));
+      }
+    }
+  };
+
+  const updateDeepGigData = (data, keys, value, files) => {
+    const [currentKey, ...restKeys] = keys;
+
+    if (keys.length === 1) {
+      if (files && files.length) {
+        const file = files[0];
+        const reader = new FileReader();
+
+        return new Promise((resolve) => {
+          reader.onloadend = () => {
+            resolve({
+              ...data,
+              [currentKey]: reader.result,
+            });
+          };
+          reader.readAsDataURL(file);
+        });
+      } else {
+        return Promise.resolve({
+          ...data,
+          [currentKey]: value,
+        });
+      }
+    } else {
+      const currentData = data[currentKey] || {};
+
+      return updateDeepGigData(currentData, restKeys, value, files).then((updatedData) => ({
+        ...data,
+        [currentKey]: updatedData,
+      }));
+    }
+  };
+
+  const handleSubmit = async (id) => {
+     console.log(id)
+    try {
+      const res = await axios.put(`http://localhost:3000/api/createcard/${id}`, gig)
+      console.log(res.data)
+    } catch (error) {
+      console.log(error)
+    }
+
+    // Do something with the gig object, for example, submit it to a server or use it in some other way.
+    //console.log(gig);
+  };
+
+
+  let num = 0
+  //console.log(gig)
+  let slide = ["static-div", "first-div", "second-div", "third-div"]
+  const next = () => {
+    const div = document.getElementById("gig")
+    num++
+    if (num < slide.length) {
+      div.classList.add(slide[num])
+    }
+    console.log(num)
+  }
+  const back = () => {
+    const div = document.getElementById("gig")
+    div.classList.remove(slide[num])
+    num--
+    if (num > 0) {
+      div.classList.add(slide[num])
+    }
+    console.log(num)
+  }
+  return (
+    <div className=' bg-white w-[850px] h-auto overflow-hidden mx-6 my-4 py-8 rounded-md shadow-sm shadow-purple-400'>
+      <form onSubmit={()=>{handleSubmit(card._id)}}>
+        <div id='gig' className='w-[3400px] flex '>
+          {/* first div */}
+          <div className=' w-[850px] h-auto'>
+            <h1 className='text-purple-700 font-bold text-center mb-2 text-xl'>Update Gig</h1>
+
+            <div className='ml-32 pl-1 '>
+              <h4 className='font-bold my-2 text-[12px] text-purple-700'>Gig Name</h4>
+              <input type="text"
+                name='cardname'
+                value={gig.cardname}
+                onChange={handleInputChange}
+                className=' w-4/5 text-sm bg-purple-50 mb-1 rounded-md outline-none border-2 border-purple-600 p-1' />
+            </div>
+
+            <div className='ml-32 pl-1 '>
+              <h4 className='font-bold my-2 text-[13px] text-purple-700'>Description</h4>
+              <textarea rows={4} type="text"
+                name='description'
+                value={gig.description}
+                onChange={handleInputChange}
+                className=' w-4/5 outline-none text-sm bg-purple-50 mb-1 rounded-md border-2 p-1 border-purple-600 ' />
+            </div>
+            <div className='ml-32 pl-1'>
+              <select name="servicetype" id="" value={gig.servicetype} onChange={handleInputChange} className=' w-4/5 outline-none bg-purple-50 my-2 text-sm rounded-md text-purple-700 border-2 border-purple-700 p-1'>
+                <option value="web development">web development</option>
+                <option value="app development">app development</option>
+                <option value="web design">web design</option>
+                <option value="software development">software development</option>
+              </select>
+            </div>
+            <div className='flex ml-32 pl-3 my-2'>
+              <div className=' relative border-2 border-purple-700 bg-purple-50 rounded-md w-40 h-24 ml-4 '>
+                <h5 className=' absolute text-sm font-sans font-bold text-purple-700 m-1'>Add Image</h5>
+                <AiOutlinePlus size={45} className=' text-purple-700 absolute left-14 top-7' />
+                <input type="file" name="images" onChange={handleInputChange} accept='image/*' className=' absolute top-9 opacity-0' id="" />
+              </div>
+              {/* <div className=' relative border-2 border-purple-700 bg-purple-50 rounded-md w-40 h-24 ml-4 '>
+              <h5 className=' absolute text-sm font-sans font-bold text-purple-700 m-1'>Add Image</h5>
+              <AiOutlinePlus size={45} className=' text-purple-700 absolute left-14 top-7' />
+              <input type="file" name="" className=' absolute top-9 opacity-0' id="" />
+            </div>
+            <div className=' relative border-2 border-purple-700 bg-purple-50 rounded-md w-40 h-24 ml-4 '>
+              <h5 className=' absolute text-sm font-sans font-bold text-purple-700 m-1'>Add Image</h5>
+              <AiOutlinePlus size={45} className=' text-purple-700 absolute left-14 top-7' />
+              <input type="file" name="" className=' absolute top-9 opacity-0' id="" />
+            </div> */}
+            </div>
+            <div className=' w-[850px] flex justify-end pr-10'>
+              <section onClick={next} className=' text-sm font-medium rounded-sm text-white bg-purple-700 hover:bg-purple-600 py-1 px-6  shadow-sm shadow-gray-500'>Next</section>
+            </div>
           </div>
-          <div className='my-2'>
-            <h4 className='font-bold my-2 text-purple-50'>Extra Revisions</h4>
-            <select name="" id="" className=' bg-purple-50 mb-2 rounded-md outline-none border-2 w-64 border-purple-50 p-1 font-bold text-purple-600'>
-              <option value="">1</option>
-            </select><input type="text" placeholder='Extra Price' className=' bg-purple-50 w-64 mb-2 ml-14 rounded-md outline-none border-2 border-purple-50 p-1 placeholder:text-purple-600 font-medium' />
+          {/* second div */}
+          <div className=' w-[850px] h-auto'>
+            <div className=' py-1'>
+              <h1 className='text-lg font-bold text-center my-4 text-purple-700'>Basic Plan</h1>
+              <div className='ml-32 pl-1'>
+                <input type="text"
+                  name="plans.basic.planname"
+                  value={gig.plans.basic.planname}
+                  onChange={handleInputChange}
+                  placeholder='Plan Name' className='w-4/5 bg-purple-50 mb-2 rounded-md outline-none border-2 border-purple-700 text-sm p-1 placeholder:text-purple-500' />
+                <textarea name="plans.basic.description" id=""
+                  value={gig.plans.basic.description}
+                  onChange={handleInputChange}
+                  className='w-4/5 bg-purple-50 mb-2 text-sm rounded-md outline-none border-2 border-purple-700 p-1 my-2 placeholder:text-purple-500' cols="30" rows="4" placeholder={`Plan Description (list manner)`} />
+                <div className='my-1 flex'>
+                  <div>
+                    <h4 className='font-bold my-2 text-[13px] text-purple-700'>Delivery</h4>
+                    <input type='text'
+                      name='plans.basic.delivery'
+                      value={gig.plans.basic.delivery}
+                      onChange={handleInputChange}
+                      className=' bg-purple-50 mb-2 text-sm rounded-md outline-none border-2 w-64 border-purple-700 p-1 font-bold' />
+                  </div>
+                  <div>
+                    <h4 className='font-bold ml-14 my-2 text-[13px] text-purple-700'>Revisions</h4>
+                    <input type="text"
+                      name='plans.basic.revision'
+                      value={gig.plans.basic.revision}
+                      onChange={handleInputChange}
+                      className=' bg-purple-50 w-64 mb-2 ml-14 text-sm rounded-md outline-none border-2 border-purple-700 p-1 placeholder:text-purple-700' />
+                  </div>
+                </div>
+                <div className='my-2'>
+                  <h4 className='font-bold my-2 text-[13px] text-purple-700'>Price</h4>
+                  <input type="text"
+                    name='plans.basic.price'
+                    value={gig.plans.basic.price}
+                    onChange={handleInputChange}
+                    className=' text-sm bg-purple-50 w-64 mb-2 rounded-md outline-none border-2 border-purple-700 p-1 placeholder:text-purple-700' />
+                </div>
+              </div>
+            </div>
+            <div className=' w-[850px] flex justify-between px-10'>
+              <section onClick={back} className=' text-sm font-medium rounded-sm text-white bg-purple-700 hover:bg-purple-600 py-1 px-6  shadow-sm shadow-gray-500'>Back</section>
+              <section onClick={next} className=' text-sm font-medium rounded-sm text-white bg-purple-700 hover:bg-purple-600 py-1 px-6  shadow-sm shadow-gray-500'>Next</section>
+            </div>
+          </div>
+          {/* third div */}
+          <div className=' w-[850px] h-auto'>
+            <div className=' py-1'>
+              <h1 className='text-lg font-bold text-center my-4 text-purple-700'>Standard Plan</h1>
+              <div className='ml-32 pl-1'>
+                <input type="text"
+                  name='plans.standard.planname'
+                  value={gig.plans.standard.planname}
+                  onChange={handleInputChange}
+                  placeholder='Plan Name' className='w-4/5 bg-purple-50 mb-2 rounded-md outline-none border-2 border-purple-700 text-sm p-1 placeholder:text-purple-500' />
+                <textarea name="plans.standard.description" id=""
+                  value={gig.plans.standard.description}
+                  onChange={handleInputChange}
+                  className='w-4/5 bg-purple-50 mb-2 text-sm rounded-md outline-none border-2 border-purple-700 p-1 my-2 placeholder:text-purple-500' cols="30" rows="4" placeholder={`Plan Description (list manner)`} />
+                <div className='my-1 flex'>
+                  <div>
+                    <h4 className='font-bold my-2 text-[13px] text-purple-700'>Delivery</h4>
+                    <input type='text'
+                      name='plans.standard.delivery'
+                      value={gig.plans.standard.delivery}
+                      onChange={handleInputChange}
+                      className=' bg-purple-50 mb-2 text-sm rounded-md outline-none border-2 w-64 border-purple-700 p-1 font-bold' />
+                  </div>
+                  <div>
+                    <h4 className='font-bold ml-14 my-2 text-[13px] text-purple-700'>Revisions</h4>
+                    <input type="text"
+                      name='plans.standard.revision'
+                      value={gig.plans.standard.revision}
+                      onChange={handleInputChange}
+                      className=' bg-purple-50 w-64 mb-2 ml-14 text-sm rounded-md outline-none border-2 border-purple-700 p-1 placeholder:text-purple-700' />
+                  </div>
+                </div>
+                <div className='my-2'>
+                  <h4 className='font-bold my-2 text-[13px] text-purple-700'>Price</h4>
+                  <input type="text"
+                    name='plans.standard.price'
+                    value={gig.plans.standard.price}
+                    onChange={handleInputChange}
+                    className=' text-sm bg-purple-50 w-64 mb-2 rounded-md outline-none border-2 border-purple-700 p-1 placeholder:text-purple-700' />
+                </div>
+              </div>
+            </div>
+            <div className=' w-[850px] flex justify-between px-10'>
+              <section onClick={back} className=' text-sm font-medium rounded-sm text-white bg-purple-700 hover:bg-purple-600 py-1 px-6  shadow-sm shadow-gray-500'>Back</section>
+              <section onClick={next} className=' text-sm font-medium rounded-sm text-white bg-purple-700 hover:bg-purple-600 py-1 px-6  shadow-sm shadow-gray-500'>Next</section>
+            </div>
+          </div>
+          {/* forth div */}
+          <div className=' w-[850px] h-auto'>
+            <div className=' py-1'>
+              <h1 className='text-lg font-bold text-center my-4 text-purple-700'>Premium Plan</h1>
+              <div className='ml-32 pl-1'>
+                <input type="text"
+                  name='plans.premium.planname'
+                  value={gig.plans.premium.planname}
+                  onChange={handleInputChange}
+                  placeholder='Plan Name' className='w-4/5 bg-purple-50 mb-2 rounded-md outline-none border-2 border-purple-700 text-sm p-1 placeholder:text-purple-500' />
+                <textarea name="plans.premium.description" id=""
+                  value={gig.plans.premium.description}
+                  onChange={handleInputChange}
+                  className='w-4/5 bg-purple-50 mb-2 text-sm rounded-md outline-none border-2 border-purple-700 p-1 my-2 placeholder:text-purple-500' cols="30" rows="4" placeholder={`Plan Description (list manner)`} />
+                <div className='my-1 flex'>
+                  <div>
+                    <h4 className='font-bold my-2 text-[13px] text-purple-700'>Delivery</h4>
+                    <input type='text'
+                      name='plans.premium.delivery'
+                      value={gig.plans.premium.delivery}
+                      onChange={handleInputChange}
+                      className=' bg-purple-50 mb-2 text-sm rounded-md outline-none border-2 w-64 border-purple-700 p-1 font-bold' />
+                  </div>
+                  <div>
+                    <h4 className='font-bold ml-14 my-2 text-[13px] text-purple-700'>Revisions</h4>
+                    <input type="text"
+                      name='plans.premium.revision'
+                      value={gig.plans.premium.revision}
+                      onChange={handleInputChange}
+                      className=' bg-purple-50 w-64 mb-2 ml-14 text-sm rounded-md outline-none border-2 border-purple-700 p-1 placeholder:text-purple-700' />
+                  </div>
+                </div>
+                <div className='my-2'>
+                  <h4 className='font-bold my-2 text-[13px] text-purple-700'>Price</h4>
+                  <input type="text"
+                    name='plans.premium.price'
+                    value={gig.plans.premium.price}
+                    onChange={handleInputChange}
+                    className=' text-sm bg-purple-50 w-64 mb-2 rounded-md outline-none border-2 border-purple-700 p-1 placeholder:text-purple-700' />
+                </div>
+              </div>
+            </div>
+            <div className=' w-[850px] flex justify-between px-10'>
+              <section onClick={back} className=' text-sm font-medium rounded-sm text-white bg-purple-700 hover:bg-purple-600 py-1 px-6  shadow-sm shadow-gray-500'>Back</section>
+              <button type='submit' className=' text-sm font-medium rounded-sm text-white bg-purple-700 hover:bg-purple-600 py-1 px-6  shadow-sm shadow-gray-500'>Create</button>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div className=' bg-purple-800 mb-5 py-1'>
-        <h1 className='text-lg font-bold text-center my-4 text-white'>Premium Plan</h1>
-        <div className='ml-32 pl-1'>
-          <input type="text" placeholder='Plan Name' className='w-4/5 bg-purple-50 mb-2 rounded-md outline-none border-2 border-purple-50 p-1 placeholder:text-purple-800' />
-          <textarea name="" id="" className='w-4/5 bg-purple-50 mb-2 rounded-md outline-none border-2 border-purple-50 p-1 my-2 placeholder:text-purple-800' cols="30" rows="5" placeholder={`Plan Description (list manner)`} />
-          <div className='my-1'>
-            <h4 className='font-bold my-2 text-purple-50'>Revisions</h4>
-            <select name="" id="" className=' bg-purple-50 mb-2 rounded-md outline-none border-2 w-64 border-purple-50 p-1 font-bold text-purple-800'>
-              <option value="">0</option>
-              <option value="">1</option>
-              <option value="">2</option>
-              <option value="">3</option>
-            </select><input type="text" placeholder='Price' className=' bg-purple-50 w-64 mb-2 ml-14 rounded-md outline-none border-2 border-purple-50 p-1 placeholder:text-purple-800 font-medium' />
-          </div>
-          <div className='my-2'>
-            <h4 className='font-bold my-2 text-purple-50'>Extra Revisions</h4>
-            <select name="" id="" className=' bg-purple-50 mb-2 rounded-md outline-none border-2 w-64 border-purple-50 p-1 font-bold text-purple-800'>
-              <option value="">1</option>
-            </select><input type="text" placeholder='Extra Price' className=' bg-purple-50 w-64 mb-2 ml-14 rounded-md outline-none border-2 border-purple-50 p-1 placeholder:text-purple-800 font-medium' />
-          </div>
-        </div>
-      </div>
-
-      <div className='flex justify-center'>
-        <button className='text-white bg-purple-800 font-bold py-2 text-lg px-10 rounded-md shadow-md shadow-gray-300 my-4 hover:bg-purple-600'>Create Gig</button>
-      </div>
+      </form>
     </div>
   )
 }

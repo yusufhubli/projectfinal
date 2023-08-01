@@ -5,6 +5,19 @@
 body{
     @apply bg-gray-100;
 }
-body::-webkit-scrollbar{
-    display: none;
-}
+/* body::-webkit-scrollbar{
+
+} */
+.static-div{
+    @apply translate-x-0;
+  }
+  
+  .first-div{
+    @apply -translate-x-1/4;
+  }
+  .second-div{
+    @apply -translate-x-2/4;
+  }
+  .third-div{
+    @apply -translate-x-3/4;
+  }

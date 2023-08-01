@@ -4,12 +4,8 @@ import mongoose,{ model,models,Schema } from "mongoose";
 const cardSchema = new Schema({
     cardname:String,
     description:String,
-    images:{
-        image1:String,
-        image2:String,
-        image3:String,
-
-    },
+    servicetype:String,
+    images:String,
     plans:{
         basic:{
             planname:String,
@@ -47,6 +43,6 @@ const cardSchema = new Schema({
 
 
 })
-const Card = models.Card || model("Card",cardSchema)
+const Card = models.Card ||  model("Card",cardSchema)
 
 export default Card

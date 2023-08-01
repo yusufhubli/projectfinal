@@ -1,8 +1,8 @@
 import Card from '@/components/Card'
 import React from 'react'
 
-const getCard = async()=>{
-    const res = await fetch("http://localhost:3000/api/cards",{next:{revalidate:30}})
+export const getCard = async()=>{
+    const res = await fetch("http://localhost:3000/api/cards",{next:{revalidate:10}})
     const data = res.json()
     return data
 }
