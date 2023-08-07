@@ -16,14 +16,13 @@ import Register from '@/components/Register'
 import { CategoryNav } from '@/components/Navbar'
 import MyComponent from '@/components/test'
 import Rating from '@/components/Rating'
+import { Suspense } from 'react'
+import Loading from './loading'
 
 const page = () => {
   return (
-    <div className='pt-16 h-[400px]'>
-        {/* <ProfileNav /> */}
-        {/* <Orders/> */}
-        {/* <UserCard/> */}
-        <Rating/>
+    <div className='pt-16 h-[600px]'>
+       <Register/>
     </div>
   )
 }

@@ -27,12 +27,12 @@ export async function POST(req){
     }
 
 }
-
 export async function GET(){
-    try {
-        const order = await Order.find().populate('freelancer').populate("client")
-        return NextResponse.json(order)
-    } catch (error) {
-        return NextResponse.json(error)
-    }
+  await connectToDB()
+try {
+   const order = await Order.find().populate('freelancer').populate("client")
+   return NextResponse.json(order)
+} catch (error) {
+   return NextResponse.json(error)
+}
 }

@@ -7,8 +7,9 @@ import Review from './Review';
 import Modals from './Modals'
 
 
-const ViewGig = ({data,userId}) => {
+const ViewGig = ({data,userId,review}) => {
     console.log("view page",userId,data)
+    //console.log(" pppage",review)
     const [plan,setPlan] =useState('basic')
     const [tog,setTog] = useState(false)
     const sellerId = data.sellerId
@@ -41,8 +42,8 @@ const ViewGig = ({data,userId}) => {
             <div key={_id} className='mx-4 my-5 grid grid-cols-7 gap-2 w-[1250px] h-auto shadow-md shadow-purple-200 bg-gray-100'>
                 <div className=' col-span-5 bg-white h-auto'>
                     <h1 className=' text-3xl font-bold text-purple-900 my-4 mx-20'>{cardname}</h1>
-                    <div className='mx-20 my-2 w-[710px] h-[300px] bg-purple-500 rounded-md'>
-                        <img src={images} alt="image1" className='w-[700px] h-[300px]' />
+                    <div className='mx-20 my-2 w-[710px] h-[300px] border border-purple-700 rounded-md'>
+                        <img src={images} alt="image1" className='w-[710px] h-[300px]' />
                     </div>
                     <div className='mx-20 my-4'>
                         <h1 className=' font-bold text-lg text-purple-800 my-1'>Description</h1>
@@ -117,7 +118,7 @@ const ViewGig = ({data,userId}) => {
                     <AboutSeller data={sellerId} />
                 </div>
                 <div className='pl-1 col-span-2 h-[920px] bg-white scrollbar overflow-hidden overflow-x-hidden overflow-y-scroll' >
-                    <Review />
+                    <Review sellerId={sellerId} userId={userId} review={review}/>
                 </div>
                 <div className=' col-span-7 py-2 bg-white'>
                     <h1 className=' text-lg font-bold text-purple-700 mx-12'>Similar Service</h1>

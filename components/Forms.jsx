@@ -1,40 +1,55 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import Image from 'next/image'
+//import Image from 'next/image'
 import {BsFillCameraFill} from 'react-icons/bs'
+import { FaUserCircle } from 'react-icons/fa'
 import axios from 'axios'
+import Link from 'next/link'
 
-const Forms = () => {
-  const [file,setFile] = useState()
+const Forms = ({user,userId}) => {
+  const {name,image,country,description,email} = user
   const [data,setdata] = useState({
-    name:"",
-    country:"",
-    email:"",
-    description:"",
-    image:""
+    name:name,
+    country:country,
+    email:email,
+    description:description,
+    image:image
   })
   console.log(data)
-  console.log(file)
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      // reader.result contains the base64 encoded string
+      setdata({ ...data,
+        image: reader.result,
+        });
+  
+    };
+
+    if (file) {
+      reader.readAsDataURL(file); // This will trigger the onloadend event when the file reading is complete.
+    }
+  };
+
 
   const submit2 = async()=>{
-        if(file){
-          const data1 = new FormData()
-          data1.append("file",file)
-          data.image = file.name
-          const res = await axios.post("http://localhost:3000/api/cardupload",data1)
-
-          const res2 = await axios.post("http://localhost:3000/api/profile",data)
+    console.log(userId)
+          const res = await axios.post(`http://localhost:3000/api/profile/${userId}`,data)
           console.log(res.data)
-          console.log(res2.data)
-        }
+        
     }
   return (
-    <div className='pt-20 '>
-       <div className=' drop-shadow-md text-center my-5 shadow-md bg-white shadow-gray-300  w-[800px] h-auto py-10 rounded-md'>
-         <div className='ml-[42%] my-2 w-[15%] h-28 border-2 relative border-purple-600 rounded-full'>
-         <Image src={'/image/py.png'} height={30} width={30} className=' rounded-full p-2 w-full'/>
-         <BsFillCameraFill size={30} className=' absolute top-[70px] bg-white left-[95px] text-purple-400'/>
-         <input type="file" name="" id="" onChange={e=>setFile(e.target.files[0])} className=' absolute top-16 left-8'/>
+    <div className=' flex justify-center '>
+       <div className=' drop-shadow-md text-center my-5 shadow-md bg-white shadow-purple-400  w-[800px] h-auto py-10 rounded-md'>
+         <div className='flex justify-start ml-6'><Link href={"/profile"}>back</Link></div>
+         <div className='ml-[42%] my-2 w-[15%] h-28 relative rounded-full'>
+          {image ? <img src={image} alt='image' className=' h-[115px] w-[115px] rounded-full border-2 border-purple-600 '/> :<FaUserCircle size={115} className=' text-gray-500' />}
+         {/* <img src={image} alt='image' className=' h-[115px] w-[115px] rounded-full border-2 border-purple-600 '/> */}
+         <BsFillCameraFill size={30} className=' absolute top-[70px] left-[95px] text-black'/>
+         <input type="file" name="" id="" onChange={handleFileChange} className=' absolute opacity-0 top-16 left-8'/>
          </div>
          <input type="text"
           value={data.name}

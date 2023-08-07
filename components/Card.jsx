@@ -13,16 +13,17 @@ const Card = (data) => {
   // console.log(data.data.sellerId)
   const { _id, cardname, images } = data.data
   const { basic } = data.data.plans
-  const { name, image } = data.data.sellerId
+  const {name,image } = data.data.sellerId
+ // console.log(data.data.sellerId.name)
   return (
     // <div className=' flex flex-wrap w-[1250px] h-auto'>
 
-    <div key={_id} onClick={() => router.push(`/buyer/${_id}`)} className='container rounded-md w-72 h-60 border-2 bg-white ml-4 mt-2 overflow-hidden'>
+    <div key={_id} onClick={() => router.push(`/buyer/${_id}`)} className='container rounded-md w-72 h-60 border-2 bg-white ml-5 mt-4 overflow-hidden'>
       {/* console.log(card) */}
       <img className='w-72 h-36 ' alt='image' src={images} width={285} height={160} />
       <h1 className='m-2 font-bold'>{cardname}</h1>
       <div className='flex items-center mx-3'>
-        <Image className='w-10 h-10 border border-purple-500 p-1 rounded-full ml-1' src={`/${image}`} width={50} height={40} />
+        <img className='w-10 h-10 border border-purple-500 rounded-full ml-1' src={image} width={50} height={40} />
         <div className='ml-2  w-32'>
           <h6 className='text-xs font-bold text-gray-600'>{name}</h6>
           <div className='flex -ml-[1px] text-yellow-500'><AiFillStar size={12} /><AiFillStar size={12} /><AiFillStar size={12} /><AiFillStar size={12} /><AiFillStar size={12} /></div>
@@ -75,11 +76,11 @@ export const UserCard = ({ userId, card }) => {
   return (
     // <div className=' flex flex-wrap w-[1250px] h-auto'>
     <>
-      {update === false ? <div key={_id} className='container rounded-md w-72 h-60 border-2 bg-white ml-4 mt-2 relative '>
+      {update === false ? <><div key={_id} className='container rounded-md w-72 h-60 border-2 bg-white ml-4 mt-2 relative '>
         <img className='w-72 h-36 ' src={images} width={285} height={160} />
         <h1 className='m-2 font-bold'>{cardname}</h1>
         <div className='flex items-center mx-3'>
-          <img className='w-10 h-10 border border-purple-500 p-1 rounded-full ml-1' src={image} width={50} height={40} />
+          <img className='w-10 h-10 border border-purple-500 rounded-full ml-1' src={image} width={50} height={40} />
           <div className='ml-2  w-32'>
             <h6 className='text-xs font-bold text-gray-600'>{name}</h6>
             <div className='flex -ml-[1px] text-yellow-500'><AiFillStar size={12} /><AiFillStar size={12} /><AiFillStar size={12} /><AiFillStar size={12} /><AiFillStar size={12} /></div>
@@ -98,10 +99,10 @@ export const UserCard = ({ userId, card }) => {
             <div onClick={()=>setToggle(false)} className='flex items-center pl-5 pt-1 cursor-pointer hover:bg-gray-200'>back</div>
         </div>}
         
-      </div> : <div className=''>
+      </div></> :<> <div className=''>
         <UpdateGig card={card} />
         <button className=' absolute top-44 left-[420px] text-purple-700 font-bold ' onClick={() => setUpdate(false)}>back</button>
-      </div>
+      </div></>
       }
     </>
 

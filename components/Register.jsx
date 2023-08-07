@@ -43,12 +43,6 @@ const Register = () => {
                         <button className='flex text-lg w-80 justify-center rounded-full py-1 text-white bg-purple-700 font-bold hover:bg-purple-600 my-4 shadow-2xl '
                         onClick={onReg}>Register</button>
                     </div>
-                    <div className='flex justify-center'>
-                        <button className='flex text-lg w-80 justify-center rounded-full py-1 text-purple-700 border-2 border-purple-700 font-bold hover:bg-gray-100 my-1'>google</button>
-                    </div>
-                    <div className='flex justify-center'>
-                        <button className='flex text-lg w-80 justify-center rounded-full py-1 text-purple-700 border-2 border-purple-700 font-bold hover:bg-gray-100 my-1'>facebook</button>
-                    </div>
                     <small className='ml-16'>already have an account?<span className=' text-purple-700 cursor-pointer text-sm ml-1 font-bold' onClick={()=>router.push("/signin")}>Login</span></small>
                 </div>
             </div>

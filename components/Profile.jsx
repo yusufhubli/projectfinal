@@ -1,22 +1,29 @@
 "use client"
 import React from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { ImLocation2 } from 'react-icons/im'
 import { AiOutlineFileDone,AiFillStar } from 'react-icons/ai'
 
 
 const Profile = ({user}) => {
-  const {name,image} = user
+  const {name,image,country} = user
  // console.log(user)
   return (
-    <div className='container w-80 h-52 my-2 mx-4 bg-white shadow-sm shadow-purple-500 rounded-md'>
+    <div className='container w-80 h-60 my-2 mx-4 bg-white shadow-sm shadow-purple-500 rounded-md'>
       <div className='flex justify-center'>
-        <img src={`free/${image}`} className='rounded-full border w-20 mt-6 h-20 border-purple-500' width={130} height={100} />
+        <img src={image} className='rounded-full border w-20 mt-6 h-20 border-purple-500' width={130} height={100} />
       </div>
+      <div className='flex justify-center pt-2 text-yellow-500'><AiFillStar size={16} /><AiFillStar size={16} /><AiFillStar size={16} /><AiFillStar size={16} /><AiFillStar size={16} /></div>
       <div className='flex justify-center'>
         <h1 className='text-2xl font-bold text-purple-900'>{name}</h1>
       </div>
-      <div className='flex justify-center text-green-500 text-sm font-bold'>online</div>
+      <div className='flex justify-center items-center py-1 text-gray-500'>
+        <ImLocation2 size={16}/><h1 className='text-sm font-medium'>{country}</h1>
+      </div>
+      <div className=' flex justify-center'>
+        <Link href={"/edit"} className='px-10 py-1 mt-2 bg-purple-700 text-white rounded-sm shadow-md shadow-gray-500 font-bold text-sm'>Edit</Link>
+      </div>
     </div>
   )
 }

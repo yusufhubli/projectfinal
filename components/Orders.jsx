@@ -1,13 +1,33 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
 import { AiFillStar } from 'react-icons/ai'
 import { BsThreeDots } from 'react-icons/bs'
-const Orders = ({orders}) => {
-    const {cardname,client,freelancer,createdAt,plan,price,title,description,status} = orders
-    const {filename,content} = orders.sendedfile
+import axios from 'axios'
+const Orders = ({ orders }) => {
+    const {_id, cardname, client, freelancer, createdAt,deliveredfile, plan, price, title, description, status } = orders
+    const { filename, content } = orders.sendedfile
     console.log(freelancer.name)
-   // console.log(orders)
+
+    // console.log(orders)
+
+
+    const downloadFile = async (id) => {
+        try {
+            const response = await axios.get(`http://localhost:3000/api/order/dfile/${id}`, {
+                responseType: 'blob', // Set the response type to 'blob'
+            });
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = deliveredfile.filename; // Set the filename for download
+            a.click();
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('Error downloading file:', error);
+        }
+    };
     return (
         <div className=' w-[800px] h-auto p-3 bg-white shadow-md shadow-purple-200 rounded-md m-2'>
             {/** seller info */}
@@ -26,26 +46,38 @@ const Orders = ({orders}) => {
                 </div>
             </div>
             {/** more info */}
-            <div className='mx-6 my-2 pb-2 flex justify-between border-b-2 border-purple-700'>
-                <div className=' ml-5 text-[17px] font-medium text-gray-600'>
+            <div className='mx-6 my-2 pb-2 border-b-2 border-purple-700'>
+            <h1 className=' font-bold text-xl'> Title: {title}</h1>
+                <section className=' text-[17px] font-medium text-gray-500 py-2 border-b border-gray-600'>Description: {description}</section>
+                <div className=' text-[15px] font-medium text-black flex justify-between py-1 px-10'><h1>Order Date</h1><h1>{createdAt}</h1></div>
+                <div className=' text-[15px] font-medium text-black flex justify-between py-1 px-10'><h1>Delivery date</h1><h1>30-04-2023</h1></div>
+                <div className=' text-[15px] font-medium text-black flex justify-between py-1 px-10'><h1>status</h1><h1>{status === false ? <b className=' text-green-500'>Active</b> : <b className=' text-purple-700'>Completed</b>}</h1></div>
+                <div className=' text-[15px] font-medium text-black flex justify-between py-1 px-10'><h1>Sended File</h1><h1>{filename}</h1></div>
+                <div className=' text-[15px] font-medium text-black flex justify-between items-center py-1 px-10'><h1>Received file</h1>{deliveredfile ? <div className='flex items-center'><h1 className=' text-xs text-gray-500'>{deliveredfile.filename}</h1>
+                    <button onClick={() => downloadFile(_id)} className=' px-5 py-1 text-sm my-1 ml-4 rounded-md text-white bg-purple-700 hover:bg-purple-500 shadow-sm shadow-gray-400'>Download</button></div> : <h1 className=' font-medium'>Pending</h1>}
+                </div>
+                {/* <div className=' ml-5 text-[17px] font-medium text-gray-600'>
                     <h1 className='py-1'>Orderd date</h1>
                     <h1 className='py-1'>Delivery date</h1>
                     <h1 className='py-1'>Orderd Status</h1>
-                    <h1 className='py-1'>Order </h1>
+                    <h1 className='py-1'>Sended File </h1>
+                    <h1 className='py-1'>Received File </h1>
                 </div>
                 <div className='mr-5 text-[17px] font-bold'>
                     <h1 className='py-1'>26-10-2023</h1>
-                    <h1 className='py-1'>40-04-2023</h1>
+                    <h1 className='py-1'>29-10-2023</h1>
                     <h1 className='py-1'>ACTIVE</h1>
                     <h1 className='py-1'>{filename}</h1>
-                    <button className=' px-5 py-1 text-sm my-1 rounded-md text-white bg-purple-700 hover:bg-purple-500 shadow-sm shadow-gray-400'>Download</button>
-                </div>
+                    <h1 className='py-1'>{deliveredfile ? deliveredfile.filename : "pending"}
+                     <button onClick={() => downloadFile(_id)} className=' px-5 py-1 text-sm my-1 rounded-md text-white bg-purple-700 hover:bg-purple-500 shadow-sm shadow-gray-400'>Download</button></h1> 
+                    {/* <button className=' px-5 py-1 text-sm my-1 rounded-md text-white bg-purple-700 hover:bg-purple-500 shadow-sm shadow-gray-400'>Download</button> */}
+
             </div>
 
             {/** more view */}
             <div className=' flex justify-between items-center mx-8 '>
                 <span className=' font-bold text-lg text-black'>3 days left...</span>
-                <span className=' text-sm font-bold py-1 px-5 rounded-sm shadow-sm shadow-purple-500  text-green-500'>COMPLETED</span>
+                <span className=' text-sm font-bold py-1 px-5 rounded-sm shadow-sm shadow-purple-500  text-green-500'>ACTIVE</span>
                 <BsThreeDots size={35} className='  p-1 rounded-full hover:bg-purple-100 ' />
             </div>
 
@@ -53,11 +85,62 @@ const Orders = ({orders}) => {
     )
 }
 
-export const SellerOrders = ({userId,orders}) => {
-    const {cardname,client,freelancer,createdAt,plan,price,title,description,status} = orders
-    const {filename,content} = orders.sendedfile
+export const SellerOrders = ({ userId, orders }) => {
+    const [send,setSend] =useState({
+        deliveredfile:{
+            filename:'',
+            content:''
+        }
+    })
+    const { _id, cardname, client, freelancer, deliveredfile, createdAt, plan, price, title, description, status } = orders
+    const { filename, content } = orders.sendedfile
     console.log(freelancer.name)
-   // console.log(orders)
+    // console.log(orders)
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+            // reader.result contains the base64 encoded string
+            setSend({
+                ...send,
+                deliveredfile: {
+                    filename: file.name,
+                    content: reader.result,
+                },
+            });
+
+        };
+
+        if (file) {
+            reader.readAsDataURL(file); // This will trigger the onloadend event when the file reading is complete.
+        }
+    };
+
+    const downloadFile = async (id) => {
+        try {
+            const response = await axios.get(`http://localhost:3000/api/order/${id}`, {
+                responseType: 'blob', // Set the response type to 'blob'
+            });
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename; // Set the filename for download
+            a.click();
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('Error downloading file:', error);
+        }
+    };
+
+    const handleSubmit = async(id)=>{
+        console.log(send)
+        const res = await axios.put(`http://localhost:3000/api/order/${id}`,send)
+        console.log(res)
+      }
+
+
     return (
         <div className=' w-[800px] h-auto p-3 bg-white shadow-md shadow-purple-200 rounded-md m-2'>
             {/** seller info */}
@@ -76,20 +159,42 @@ export const SellerOrders = ({userId,orders}) => {
                 </div>
             </div>
             {/** more info */}
-            <div className='mx-6 my-2 pb-2 flex justify-between border-b-2 border-purple-700'>
-                <div className=' ml-5 text-[17px] font-medium text-gray-600'>
+            <div className='mx-6 my-2 pb-2 border-b-2 border-purple-700'>
+            <h1 className=' font-bold text-xl'>Title: {title}</h1>
+                <section className=' text-[17px] text-gray-500 py-2 border-b border-gray-600'>Description: {description}</section>
+                <div className=' text-[15px] font-medium text-black flex justify-between py-1 px-10'><h1 className=''>Order Date</h1><h1>{createdAt}</h1></div>
+                <div className=' text-[15px] font-medium text-black flex justify-between py-1 px-10'><h1 className=''>Delivery date</h1><h1>30-04-2023</h1></div>
+                <div className=' text-[15px] font-medium text-black flex justify-between py-1 px-10'><h1 className=''>status</h1><h1>{status === false ? <b className=' text-green-500'>Active</b> : <b className=' text-purple-700'>Completed</b>}</h1></div>
+                <div className=' text-[15px] font-medium text-black flex justify-between py-1 px-10'><h1 className=''>Sended File</h1>
+                    <div className=' flex items-center'>
+                        <h1 className=' text-sm '>{filename}</h1><button onClick={() => downloadFile(_id)} className=' px-5 py-1 text-sm my-1 ml-5 rounded-md text-white bg-purple-700 hover:bg-purple-500 shadow-sm shadow-gray-400'>Download</button>
+                    </div>
+                </div>
+                <div className='text-[15px] font-medium text-black flex justify-between items-center py-1 px-10'><h1 className=''>Deliver file <small className=' font-thin'>(single file zip or other files)</small></h1>
+                    {deliveredfile ? <h1 className=' font-bold text-purple-700'>File Delivered</h1> 
+                    :<div className=' flex items-center'>
+                        <input type="file" className='-mr-16' onChange={handleFileChange} name="" id="" />
+                        <button onClick={() => handleSubmit(_id)} className=' px-5 py-1 text-sm my-1 rounded-md text-white bg-purple-700 hover:bg-purple-500 shadow-sm shadow-gray-400'>Send</button>
+                    </div>}
+                </div>
+                {/* <div className=' ml-5 text-[17px] font-medium text-gray-600'>
                     <h1 className='py-1'>Orderd date</h1>
                     <h1 className='py-1'>Delivery date</h1>
                     <h1 className='py-1'>Orderd Status</h1>
-                    <h1 className='py-1'>Order </h1>
+                    <h1 className='py-1'>Received file</h1>
+                    <h1 className='py-1'>send file</h1>
                 </div>
                 <div className='mr-5 text-[17px] font-bold'>
                     <h1 className='py-1'>26-10-2023</h1>
                     <h1 className='py-1'>40-04-2023</h1>
                     <h1 className='py-1'>ACTIVE</h1>
-                    <h1 className='py-1'>{filename}</h1>
-                    <button className=' px-5 py-1 text-sm my-1 rounded-md text-white bg-purple-700 hover:bg-purple-500 shadow-sm shadow-gray-400'>Download</button>
-                </div>
+                    <h1 className='py-1'>{filename}<button onClick={() => downloadFile(_id)} className=' px-5 py-1 text-sm my-1 ml-5 rounded-md text-white bg-purple-700 hover:bg-purple-500 shadow-sm shadow-gray-400'>Download</button></h1>
+                    <h1 className='py-1'>
+                        <input type="file" onChange={handleFileChange} name="" id="" />
+                        <button onClick={()=>handleSubmit(_id)} className=' px-5 py-1 text-sm my-1 ml-5 rounded-md text-white bg-purple-700 hover:bg-purple-500 shadow-sm shadow-gray-400'>Send</button>
+                    </h1>
+
+                </div> */}
             </div>
 
             {/** more view */}

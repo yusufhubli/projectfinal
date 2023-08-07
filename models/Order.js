@@ -36,8 +36,8 @@ const orderSchema = new Schema({
      content:String
   },
   deliveredfile: {
-    type: String,
-    default:null
+    filename:String,
+     content:String,
   },
   status: {
     type: Boolean,
