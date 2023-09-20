@@ -7,7 +7,10 @@ export async function POST(req){
     try {
         const body = await req.json()
        console.log("backend",body)
-        const { freelancer,client,title,description,cardname,plan,price,sendedfile } = body;
+        const { freelancer,client,title,description,cardname,plan,price,delivery,sendedfile } = body;
+        if(title === "" && description === ""){
+          return NextResponse.json({message:"write title and description"})
+        }
        // console.log('image name',images)
        // console.log('beackend',sellerId)
         const newOrder = Order.create({
@@ -18,10 +21,12 @@ export async function POST(req){
           cardname,
           plan,
           price,
+          delivery,
           sendedfile,
         });
        // console.log(newGig)
-        return NextResponse.json({meassage:" ordered successfullly"})
+
+        return NextResponse.json({message:" ordered successfullly"})
     } catch (error) {
         return NextResponse.json({error:error.message})
     }

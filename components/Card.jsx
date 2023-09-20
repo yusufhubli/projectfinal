@@ -13,24 +13,26 @@ const Card = (data) => {
   // console.log(data.data.sellerId)
   const { _id, cardname, images } = data.data
   const { basic } = data.data.plans
-  const {name,image } = data.data.sellerId
- // console.log(data.data.sellerId.name)
+  const { name, image } = data.data.sellerId
+  // console.log(data.data.sellerId.name)
   return (
     // <div className=' flex flex-wrap w-[1250px] h-auto'>
 
-    <div key={_id} onClick={() => router.push(`/buyer/${_id}`)} className='container rounded-md w-72 h-60 border-2 bg-white ml-5 mt-4 overflow-hidden'>
+    <div key={_id} onClick={() => router.push(`/buyer/${_id}`)} className='container rounded-md w-72 h-60 md:w-[370px] md:h-72 md:ml-7 md:mt-6 border-2 bg-white ml-5 mt-4 overflow-hidden'>
       {/* console.log(card) */}
-      <img className='w-72 h-36 ' alt='image' src={images} width={285} height={160} />
-      <h1 className='m-2 font-bold'>{cardname}</h1>
-      <div className='flex items-center mx-3'>
-        <img className='w-10 h-10 border border-purple-500 rounded-full ml-1' src={image} width={50} height={40} />
-        <div className='ml-2  w-32'>
-          <h6 className='text-xs font-bold text-gray-600'>{name}</h6>
-          <div className='flex -ml-[1px] text-yellow-500'><AiFillStar size={12} /><AiFillStar size={12} /><AiFillStar size={12} /><AiFillStar size={12} /><AiFillStar size={12} /></div>
+      <img className='w-72 h-36 md:w-[370px] md:h-[180px] ' alt='image' src={images} width={285} height={160} />
+      <h1 className='m-2 text-[21px] font-bold'>{cardname}</h1>
+      <div className='flex justify-between items-center mx-5'>
+        <div className=' flex items-center'>
+          <img className='w-12 h-12 border border-purple-500 rounded-full ml-1' src={image} width={50} height={40} />
+          <div className='ml-2'>
+          <h6 className='text-[17px] font-bold text-gray-600'>{name}</h6>
+          <div className='flex -ml-[1px] text-yellow-500'><AiFillStar size={15} /><AiFillStar size={15} /><AiFillStar size={15} /><AiFillStar size={15} /><AiFillStar size={15} /></div>
+        </div>
         </div>
         <div className='flex items-center'>
-          <small className='text-sm font-bold text-gray-700'>Starts</small>
-          <span className='text-xl ml-2 font-bold text-gray-700 flex'>₹{basic.price}</span>
+          <small className='text-[17px] font-bold text-gray-700'>Starts</small>
+          <span className='text-2xl ml-2 font-bold text-gray-700 flex'>₹{basic.price}</span>
         </div>
       </div>
     </div>
@@ -42,7 +44,7 @@ export const SliderCard = () => {
   return (
     <div className=' flex flex-row w-auto h-auto'>
       <div className='container rounded-md w-56 h-48 cursor-pointer bg-white ml-1 mt-2 overflow-hidden hover:bg-gray-50 shadow-sm shadow-purple-500'>
-        <Image className='w-72 h-[100px] ' src={"/image/bg1.jpg"} width={285} height={160} />
+        <Image className='w-72 h-[120px] ' src={"/image/bg1.jpg"} width={285} height={160} />
         <h1 className='my-1 mx-4 text-[13px] font-medium text-purple-700 hover:text-black'>I will do web developer for your projects</h1>
         <div className='flex items-center'>
           <div className='flex items-center mx-2 my-0'>
@@ -72,11 +74,12 @@ export const UserCard = ({ userId, card }) => {
   const deleteCard = (id) => {
     const res = axios.delete(`http://localhost:3000/api/createcard/${id}`)
     console.log(res)
+    alert(res.data)
   }
   return (
     // <div className=' flex flex-wrap w-[1250px] h-auto'>
     <>
-      {update === false ? <><div key={_id} className='container rounded-md w-72 h-60 border-2 bg-white ml-4 mt-2 relative '>
+      {update === false ? <><div key={_id} className='container rounded-md w-72 h-60 border-2 bg-white ml-4 mt-2 relative'>
         <img className='w-72 h-36 ' src={images} width={285} height={160} />
         <h1 className='m-2 font-bold'>{cardname}</h1>
         <div className='flex items-center mx-3'>
@@ -89,19 +92,19 @@ export const UserCard = ({ userId, card }) => {
             <small className='text-sm font-bold text-gray-700'>Starts</small>
             <span className='text-xl ml-2 mr-4 font-bold text-gray-700 flex'>₹{basic.price}</span>
           </div>
-          < BsThreeDotsVertical onClick={()=>setToggle(true)} size={30} className=' hover:bg-gray-100 hover:shadow-sm hover:shadow-gray-400 rounded-full' />
+          < BsThreeDotsVertical onClick={() => setToggle(true)} size={30} className=' hover:bg-gray-100 hover:shadow-sm hover:shadow-gray-400 rounded-full' />
         </div>
         {toggle === true && <div className=' w-28 h-24 py-2 bg-white absolute rounded-md top-28 left-40 shadow-lg shadow-gray-300'>
           <div className='flex items-center pl-5 pt-1 cursor-pointer hover:bg-gray-200'
             onClick={() => setUpdate(true)}><MdEdit /><h1 className=' text-sm ml-2 '>Edit</h1></div>
           <div className='flex items-center pl-5 pt-1 cursor-pointer hover:bg-gray-200'
             onClick={() => { deleteCard(_id) }}><AiFillDelete /><h1 className=' text-sm ml-2 '>Delete</h1></div>
-            <div onClick={()=>setToggle(false)} className='flex items-center pl-5 pt-1 cursor-pointer hover:bg-gray-200'>back</div>
+          <div onClick={() => setToggle(false)} className='flex items-center pl-5 pt-1 cursor-pointer hover:bg-gray-200'>back</div>
         </div>}
-        
-      </div></> :<> <div className=''>
+
+      </div></> : <> <div className=' absolute -mt-5 -ml-5'>
         <UpdateGig card={card} />
-        <button className=' absolute top-44 left-[420px] text-purple-700 font-bold ' onClick={() => setUpdate(false)}>back</button>
+        <button className=' absolute top-10 z-20 left-[80px] text-purple-700 font-bold ' onClick={() => setUpdate(false)}>back</button>
       </div></>
       }
     </>

@@ -112,6 +112,7 @@ const NewGig = ({ userId }) => {
     try {
       const res = await axios.post("http://localhost:3000/api/createcard", gig)
       console.log(res.data)
+      alert(res.data.message)
     } catch (error) {
       console.log(error)
     }
@@ -219,12 +220,12 @@ const NewGig = ({ userId }) => {
                       className=' bg-purple-50 mb-2 text-sm rounded-md outline-none border-2 w-64 border-purple-700 p-1 font-bold' />
                   </div>
                   <div>
-                    <h4 className='font-bold ml-14 my-2 text-[13px] text-purple-700'>Revisions</h4>
+                    <h4 className='font-bold ml-14 my-2 hidden text-[13px] text-purple-700'>Revisions</h4>
                     <input type="text"
                       name='plans.basic.revision'
                       value={gig.plans.basic.revision}
                       onChange={handleInputChange}
-                      className=' bg-purple-50 w-64 mb-2 ml-14 text-sm rounded-md outline-none border-2 border-purple-700 p-1 placeholder:text-purple-700' />
+                      className=' bg-purple-50 hidden w-64 mb-2 ml-14 text-sm rounded-md outline-none border-2 border-purple-700 p-1 placeholder:text-purple-700' />
                   </div>
                 </div>
                 <div className='my-2'>
@@ -266,12 +267,12 @@ const NewGig = ({ userId }) => {
                       className=' bg-purple-50 mb-2 text-sm rounded-md outline-none border-2 w-64 border-purple-700 p-1 font-bold' />
                   </div>
                   <div>
-                    <h4 className='font-bold ml-14 my-2 text-[13px] text-purple-700'>Revisions</h4>
+                    <h4 className='font-bold ml-14 my-2 hidden text-[13px] text-purple-700'>Revisions</h4>
                     <input type="text"
                       name='plans.standard.revision'
                       value={gig.plans.standard.revision}
                       onChange={handleInputChange}
-                      className=' bg-purple-50 w-64 mb-2 ml-14 text-sm rounded-md outline-none border-2 border-purple-700 p-1 placeholder:text-purple-700' />
+                      className=' bg-purple-50 hidden w-64 mb-2 ml-14 text-sm rounded-md outline-none border-2 border-purple-700 p-1 placeholder:text-purple-700' />
                   </div>
                 </div>
                 <div className='my-2'>
@@ -313,12 +314,12 @@ const NewGig = ({ userId }) => {
                       className=' bg-purple-50 mb-2 text-sm rounded-md outline-none border-2 w-64 border-purple-700 p-1 font-bold' />
                   </div>
                   <div>
-                    <h4 className='font-bold ml-14 my-2 text-[13px] text-purple-700'>Revisions</h4>
+                    <h4 className='font-bold ml-14 my-2 hidden text-[13px] text-purple-700'>Revisions</h4>
                     <input type="text"
                       name='plans.premium.revision'
                       value={gig.plans.premium.revision}
                       onChange={handleInputChange}
-                      className=' bg-purple-50 w-64 mb-2 ml-14 text-sm rounded-md outline-none border-2 border-purple-700 p-1 placeholder:text-purple-700' />
+                      className=' bg-purple-50 hidden w-64 mb-2 ml-14 text-sm rounded-md outline-none border-2 border-purple-700 p-1 placeholder:text-purple-700' />
                   </div>
                 </div>
                 <div className='my-2'>
@@ -445,6 +446,7 @@ export const UpdateGig = ({ card }) => {
     try {
       const res = await axios.put(`http://localhost:3000/api/createcard/${id}`, gig)
       console.log(res.data)
+      alert(res.data.message)
     } catch (error) {
       console.log(error)
     }
@@ -475,7 +477,7 @@ export const UpdateGig = ({ card }) => {
     console.log(num)
   }
   return (
-    <div className=' bg-white w-[850px] h-auto overflow-hidden mx-6 my-4 py-8 rounded-md shadow-sm shadow-purple-400'>
+    <div className=' bg-white w-[850px] h-auto overflow-hidden z-20 absolute mx-6 my-4 py-8 rounded-md shadow-sm shadow-purple-400'>
       <form onSubmit={()=>{handleSubmit(card._id)}}>
         <div id='gig' className='w-[3400px] flex '>
           {/* first div */}
@@ -552,12 +554,12 @@ export const UpdateGig = ({ card }) => {
                       className=' bg-purple-50 mb-2 text-sm rounded-md outline-none border-2 w-64 border-purple-700 p-1 font-bold' />
                   </div>
                   <div>
-                    <h4 className='font-bold ml-14 my-2 text-[13px] text-purple-700'>Revisions</h4>
+                    <h4 className='font-bold ml-14 hidden my-2 text-[13px] text-purple-700'>Revisions</h4>
                     <input type="text"
                       name='plans.basic.revision'
                       value={gig.plans.basic.revision}
                       onChange={handleInputChange}
-                      className=' bg-purple-50 w-64 mb-2 ml-14 text-sm rounded-md outline-none border-2 border-purple-700 p-1 placeholder:text-purple-700' />
+                      className=' bg-purple-50 hidden w-64 mb-2 ml-14 text-sm rounded-md outline-none border-2 border-purple-700 p-1 placeholder:text-purple-700' />
                   </div>
                 </div>
                 <div className='my-2'>
@@ -599,12 +601,12 @@ export const UpdateGig = ({ card }) => {
                       className=' bg-purple-50 mb-2 text-sm rounded-md outline-none border-2 w-64 border-purple-700 p-1 font-bold' />
                   </div>
                   <div>
-                    <h4 className='font-bold ml-14 my-2 text-[13px] text-purple-700'>Revisions</h4>
+                    <h4 className='font-bold ml-14 hidden my-2 text-[13px] text-purple-700'>Revisions</h4>
                     <input type="text"
                       name='plans.standard.revision'
                       value={gig.plans.standard.revision}
                       onChange={handleInputChange}
-                      className=' bg-purple-50 w-64 mb-2 ml-14 text-sm rounded-md outline-none border-2 border-purple-700 p-1 placeholder:text-purple-700' />
+                      className=' bg-purple-50 hidden w-64 mb-2 ml-14 text-sm rounded-md outline-none border-2 border-purple-700 p-1 placeholder:text-purple-700' />
                   </div>
                 </div>
                 <div className='my-2'>
@@ -646,12 +648,12 @@ export const UpdateGig = ({ card }) => {
                       className=' bg-purple-50 mb-2 text-sm rounded-md outline-none border-2 w-64 border-purple-700 p-1 font-bold' />
                   </div>
                   <div>
-                    <h4 className='font-bold ml-14 my-2 text-[13px] text-purple-700'>Revisions</h4>
+                    <h4 className='font-bold ml-14 hidden my-2 text-[13px] text-purple-700'>Revisions</h4>
                     <input type="text"
                       name='plans.premium.revision'
                       value={gig.plans.premium.revision}
                       onChange={handleInputChange}
-                      className=' bg-purple-50 w-64 mb-2 ml-14 text-sm rounded-md outline-none border-2 border-purple-700 p-1 placeholder:text-purple-700' />
+                      className=' bg-purple-50 hidden w-64 mb-2 ml-14 text-sm rounded-md outline-none border-2 border-purple-700 p-1 placeholder:text-purple-700' />
                   </div>
                 </div>
                 <div className='my-2'>

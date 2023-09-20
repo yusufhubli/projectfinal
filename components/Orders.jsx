@@ -2,14 +2,30 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
 import { AiFillStar } from 'react-icons/ai'
-import { BsThreeDots } from 'react-icons/bs'
+
 import axios from 'axios'
 const Orders = ({ orders }) => {
-    const {_id, cardname, client, freelancer, createdAt,deliveredfile, plan, price, title, description, status } = orders
+    const {_id, cardname, client, freelancer, createdAt,deliveredfile, plan, price,delivery, title, description, status } = orders
     const { filename, content } = orders.sendedfile
     console.log(freelancer.name)
+    const [pay,setPay] = useState({
+        clientId:client._id,
+        orderId:_id,
+        sellerId:freelancer._id,
+        price:price,
+        commission:price/10,
+        status:true,
+       
 
-    // console.log(orders)
+    })
+
+     //console.log(pay)
+    const handlePayment = async(id)=>{
+        console.log("pay",pay)
+        const res = await axios.post("http://localhost:3000/api/pay",pay)
+        console.log(res.data)
+        alert(res.data)
+    }
 
 
     const downloadFile = async (id) => {
@@ -33,11 +49,11 @@ const Orders = ({ orders }) => {
             {/** seller info */}
             <div className='flex justify-between items-center mx-6 my-2 border-b-2 border-purple-700 pb-4 px-2 '>
                 <div className=' flex items-center w-80'>
-                    <Image className=' h-20 w-20 rounded-full ml-1' src={"/image/bg2.jpg"} width={60} height={60} />
+                    <img className=' h-20 w-20 rounded-full border border-purple-700 ml-1' src={freelancer.image} width={60} height={60} />
                     <div className='ml-4'>
                         <h6 className='text-xl font-bold text-gray-600'>{freelancer.name}</h6>
                         <div className='flex text-yellow-500'><AiFillStar size={16} /><AiFillStar size={16} /><AiFillStar size={16} /><AiFillStar size={16} /><AiFillStar size={16} /></div>
-                        <h1 className=' text-yellow-500 text-[18px] font-bold flex items-center'> 5.0 <span className=' text-[12px] pt-1 text-gray-600 font-medium'> (40)</span></h1>
+                        <h1 className=' text-yellow-500 text-[18px] font-bold flex items-center'> 5.0 <span className=' text-[12px] pt-1 text-gray-600 font-medium'> (1)</span></h1>
                     </div>
                 </div>
                 <div>
@@ -47,10 +63,10 @@ const Orders = ({ orders }) => {
             </div>
             {/** more info */}
             <div className='mx-6 my-2 pb-2 border-b-2 border-purple-700'>
+                <h1 className=' font-bold text-xl'>{cardname}</h1>
             <h1 className=' font-bold text-xl'> Title: {title}</h1>
                 <section className=' text-[17px] font-medium text-gray-500 py-2 border-b border-gray-600'>Description: {description}</section>
                 <div className=' text-[15px] font-medium text-black flex justify-between py-1 px-10'><h1>Order Date</h1><h1>{createdAt}</h1></div>
-                <div className=' text-[15px] font-medium text-black flex justify-between py-1 px-10'><h1>Delivery date</h1><h1>30-04-2023</h1></div>
                 <div className=' text-[15px] font-medium text-black flex justify-between py-1 px-10'><h1>status</h1><h1>{status === false ? <b className=' text-green-500'>Active</b> : <b className=' text-purple-700'>Completed</b>}</h1></div>
                 <div className=' text-[15px] font-medium text-black flex justify-between py-1 px-10'><h1>Sended File</h1><h1>{filename}</h1></div>
                 <div className=' text-[15px] font-medium text-black flex justify-between items-center py-1 px-10'><h1>Received file</h1>{deliveredfile ? <div className='flex items-center'><h1 className=' text-xs text-gray-500'>{deliveredfile.filename}</h1>
@@ -76,9 +92,9 @@ const Orders = ({ orders }) => {
 
             {/** more view */}
             <div className=' flex justify-between items-center mx-8 '>
-                <span className=' font-bold text-lg text-black'>3 days left...</span>
-                <span className=' text-sm font-bold py-1 px-5 rounded-sm shadow-sm shadow-purple-500  text-green-500'>ACTIVE</span>
-                <BsThreeDots size={35} className='  p-1 rounded-full hover:bg-purple-100 ' />
+                <span className=' font-bold text-lg text-black'>Duration {delivery} days</span>
+                <span className=' text-sm font-bold py-1 px-5 rounded-sm shadow-sm shadow-purple-500  text-green-500'>{status === false ? <b>Active</b> : <b className='text-sm font-bold text-gray-700 '>Completed</b>}</span>
+               {status === true ?<></>:<> {deliveredfile && <button onClick={()=>handlePayment(_id)} className=' px-5 py-1 text-sm my-1 ml-5 rounded-md text-white bg-purple-700 hover:bg-purple-500 shadow-sm shadow-gray-400'>Done</button>}</>}
             </div>
 
         </div>
@@ -92,7 +108,7 @@ export const SellerOrders = ({ userId, orders }) => {
             content:''
         }
     })
-    const { _id, cardname, client, freelancer, deliveredfile, createdAt, plan, price, title, description, status } = orders
+    const { _id, cardname, client, freelancer, deliveredfile, createdAt, plan, price,delivery, title, description, status } = orders
     const { filename, content } = orders.sendedfile
     console.log(freelancer.name)
     // console.log(orders)
@@ -142,11 +158,13 @@ export const SellerOrders = ({ userId, orders }) => {
 
 
     return (
+
+        
         <div className=' w-[800px] h-auto p-3 bg-white shadow-md shadow-purple-200 rounded-md m-2'>
             {/** seller info */}
             <div className='flex justify-between items-center mx-6 my-2 border-b-2 border-purple-700 pb-4 px-2 '>
                 <div className=' flex items-center w-80'>
-                    <Image className=' h-20 w-20 rounded-full ml-1' src={"/image/bg2.jpg"} width={60} height={60} />
+                    <Image className=' h-20 w-20 rounded-full border border-purple-700 ml-1' src={client.image} width={60} height={60} />
                     <div className='ml-4'>
                         <h6 className='text-xl font-bold text-gray-600'>{client.name}</h6>
                         <div className='flex text-yellow-500'><AiFillStar size={16} /><AiFillStar size={16} /><AiFillStar size={16} /><AiFillStar size={16} /><AiFillStar size={16} /></div>
@@ -160,10 +178,10 @@ export const SellerOrders = ({ userId, orders }) => {
             </div>
             {/** more info */}
             <div className='mx-6 my-2 pb-2 border-b-2 border-purple-700'>
+            <h1 className=' font-bold text-xl'>{cardname}</h1>
             <h1 className=' font-bold text-xl'>Title: {title}</h1>
                 <section className=' text-[17px] text-gray-500 py-2 border-b border-gray-600'>Description: {description}</section>
                 <div className=' text-[15px] font-medium text-black flex justify-between py-1 px-10'><h1 className=''>Order Date</h1><h1>{createdAt}</h1></div>
-                <div className=' text-[15px] font-medium text-black flex justify-between py-1 px-10'><h1 className=''>Delivery date</h1><h1>30-04-2023</h1></div>
                 <div className=' text-[15px] font-medium text-black flex justify-between py-1 px-10'><h1 className=''>status</h1><h1>{status === false ? <b className=' text-green-500'>Active</b> : <b className=' text-purple-700'>Completed</b>}</h1></div>
                 <div className=' text-[15px] font-medium text-black flex justify-between py-1 px-10'><h1 className=''>Sended File</h1>
                     <div className=' flex items-center'>
@@ -199,12 +217,13 @@ export const SellerOrders = ({ userId, orders }) => {
 
             {/** more view */}
             <div className=' flex justify-between items-center mx-8 '>
-                <span className=' font-bold text-lg text-black'>3 days left...</span>
-                <span className=' text-sm font-bold py-1 px-5 rounded-sm shadow-sm shadow-purple-500  text-green-500'>COMPLETED</span>
-                <BsThreeDots size={35} className='  p-1 rounded-full hover:bg-purple-100 ' />
+                <span className=' font-bold text-lg text-black'>Duration {delivery} days</span>
+                <span className=' text-sm font-bold py-1 px-5 rounded-sm shadow-sm shadow-purple-500  text-green-500'>{status === false ?<b> Active</b> : <b className='text-sm font-bold text-gray-700 '>Completed</b>}</span>
+            
             </div>
 
         </div>
+        
     )
 }
 

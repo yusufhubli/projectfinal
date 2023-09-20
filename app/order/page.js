@@ -3,6 +3,7 @@ import Orders from '@/components/Orders'
 import React from 'react'
 import { getUserId } from '@/helpers/getuserId'
 import axios from 'axios'
+import Navbar from '@/components/Navbar'
 
 export const getOrder = async()=>{
   const orderall = await axios.get("http://localhost:3000/api/order/getorder",{cache:'no-cache'})
@@ -17,14 +18,18 @@ export const getOrder = async()=>{
 
 const page = async() => {
   const order = await getOrder()
+  //console.log(order)
   return (
+    <>
+    <Navbar/>
     <div className='pt-20'>
-      {order ? order.map(e=><> <Orders orders={e}/></>) : 
-      <div className=' flex justify-center pt-96'>
+      {order != [] ? order.map(e=><> <Orders orders={e}/></>) : 
+      <div className=' flex justify-center py-48'>
         <h1 className=' font-bold text-xl '>you have not ordered yet</h1>
       </div> }
       
     </div>
+    </>
   )
 }
 

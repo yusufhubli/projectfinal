@@ -11,5 +11,5 @@ export const POST = async(req,{params}) =>{
      const {name,email,country,description,image} = body
      const user = await User.findOneAndUpdate({_id:id},{name,email,description,image,country})
      //console.log(data)
-     return NextResponse.json({meassage:"profile is updated"})
+     return NextResponse.json({message:"profile is updated"})
 }

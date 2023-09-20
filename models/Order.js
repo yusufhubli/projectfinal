@@ -1,6 +1,6 @@
 import mongoose,{Schema,model,models} from "mongoose";
 
-const orderSchema = new Schema({
+const orderSchema = new mongoose.Schema({
   freelancer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -31,6 +31,10 @@ const orderSchema = new Schema({
     type: Number,
     required: true,
   },
+  delivery:{
+    type:Number,
+    default:null
+  },
   sendedfile: {
      filename:String,
      content:String
@@ -54,5 +58,5 @@ const orderSchema = new Schema({
   },
 });
 
-const Order = models.Order || model("Order",orderSchema)
+const Order = models.Order || mongoose.model("Order",orderSchema)
 export default Order

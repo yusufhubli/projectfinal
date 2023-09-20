@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import mongoose,{ model,models,Schema } from "mongoose";
  
-const cardSchema = new Schema({
+const cardSchema = new mongoose.Schema({
     cardname:String,
     description:String,
     servicetype:String,
@@ -43,6 +43,6 @@ const cardSchema = new Schema({
 
 
 })
-const Card = models.Card ||  model("Card",cardSchema)
+const Card = models.Card ||  mongoose.model("Card",cardSchema)
 
 export default Card

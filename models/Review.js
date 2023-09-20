@@ -1,6 +1,6 @@
 import mongoose,{Schema,model,models} from "mongoose";
 
-const reviewSchema = new Schema({
+const reviewSchema = new mongoose.Schema({
     clientId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User"
@@ -13,5 +13,5 @@ const reviewSchema = new Schema({
     comment:String,
 })
 
-const Review = models.Review || model("Review",reviewSchema)
+const Review = models.Review || mongoose.model("Review",reviewSchema)
 export default Review

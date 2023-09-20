@@ -2,6 +2,7 @@
 import ViewGig from '@/components/ViewGig'
 import React from 'react' 
 import { getUserId } from '@/helpers/getuserId'
+import Navbar from '@/components/Navbar'
 
 
  export const getCardbyId = async(id)=>{
@@ -26,9 +27,12 @@ const page = async({params}) => {
  // console.log("review",review)
  
   return (
+    <>
+    <Navbar/>
     <div className='pt-20'>
       <ViewGig data={dat} userId={userId} review={review}/>
     </div>
+    </>
   )
 }
 

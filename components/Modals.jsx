@@ -9,6 +9,7 @@ const Modals = ({order}) => {
     cardname:order.cardname,
     plan:order.plan,
     price:order.price,
+    delivery:order.delivery,
     title:"",
     description:"",
    // sendedfile:"",
@@ -18,6 +19,7 @@ const Modals = ({order}) => {
   },
 
   })
+  console.log(order)
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -39,9 +41,11 @@ const Modals = ({order}) => {
   };
 
   const handleSubmit = async()=>{
+
     console.log(send)
     const res = await axios.post("http://localhost:3000/api/order",send)
     console.log(res)
+    alert(res.data.message)
    
    
   }
@@ -51,10 +55,10 @@ const Modals = ({order}) => {
       <div className=' w-[600px] h-[500px] bg-white relative top-5 left-80 border-t border-purple-500 shadow-sm shadow-purple-500'>
         <div className=' w-[600px] h-auto py-5 bg-white border-b border-purple-600 flex justify-between items-center px-6 '>
           <div className=' flex items-center'>
-            <img src={`/${order.freelancer.image}`} className='w-14 h-14 bg-red-300 rounded-full ' alt="image" />
+            <img src={order.freelancer.image} className='w-14 h-14 bg-red-300 rounded-full border border-purple-600 ' alt="image" />
             <h1 className=' font-bold ml-4'>{order.freelancer.name}</h1>
           </div>
-          <h1 className=' font-bold text-2xl'>${order.price}</h1>
+          <h1 className=' font-bold text-2xl'> ₹{order.price}</h1>
         </div>
         <div className='ml-20 mt-6'>
           <label htmlFor="" className=' font-bold text-purple-700 my-2'>Title</label><br />

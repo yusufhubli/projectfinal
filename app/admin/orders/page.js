@@ -1,8 +1,9 @@
+export const revalidate =10
 import AdminNav from '@/components/AdminNav'
 import React from 'react'
 
 const getOrders = async()=>{
-    const res = await fetch("http://localhost:3000/api/admin/orders",{next:{revalidate:10}})
+    const res = await fetch("http://localhost:3000/api/admin/orders",{ cache:'no-cache' })
     const user = res.json()
     return user
 }
@@ -12,7 +13,7 @@ const page = async() => {
     return (
         <div>
             <AdminNav />
-            <div>
+            <div className=' pt-20'>
             <div className=' text-3xl font-bold text-center my-4'>Order page</div>
                 <div className='mx-10'>
 
@@ -56,10 +57,10 @@ const page = async() => {
                              {user.map(order=>
                                   <tr class="bg-white border-b border-gray-600">
                                   <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                      ravi
+                                      {order.freelancer}
                                   </th>
                                   <td class="px-6 py-4">
-                                      Black
+                                     {order.client}
                                   </td>
                                   <td class="px-6 py-4">
                                       {order.title}
@@ -80,7 +81,7 @@ const page = async() => {
                                   {order.deliveredfile ? order.deliveredfile.filename : "pending"}
                                   </td>
                                   <td class="px-6 py-4">
-                                      {order.status ===false && "active"}
+                                      {order.status ===false ? "Active" : "Completed"}
                                   </td>
                                   <td class="px-6 py-4">
                                       {order.createdAt}

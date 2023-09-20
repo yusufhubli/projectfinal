@@ -23,6 +23,7 @@ const ViewGig = ({data,userId,review}) => {
         cardname:cardname,
         plan:"",
         price:"",
+        delivery:""
         })
 
     const handleChange = () => {
@@ -31,6 +32,7 @@ const ViewGig = ({data,userId,review}) => {
    //     console.log(pname[1].price)
         order.plan = pname[0]
         order.price = pname[1].price
+        order.delivery = pname[1].delivery
         console.log(order)
         setTog(true)
         
@@ -39,8 +41,8 @@ const ViewGig = ({data,userId,review}) => {
     return (
         <div className=' w-full'>
              {tog === true && <><Modals order={order}/></>}
-            <div key={_id} className='mx-4 my-5 grid grid-cols-7 gap-2 w-[1250px] h-auto shadow-md shadow-purple-200 bg-gray-100'>
-                <div className=' col-span-5 bg-white h-auto'>
+            <div key={_id} className='mx-4 my-5 grid grid-cols-7 gap-2 w-full h-auto shadow-md shadow-purple-200 bg-gray-100'>
+                <div className=' col-span-5 md:col-span-7 bg-white h-auto'>
                     <h1 className=' text-3xl font-bold text-purple-900 my-4 mx-20'>{cardname}</h1>
                     <div className='mx-20 my-2 w-[710px] h-[300px] border border-purple-700 rounded-md'>
                         <img src={images} alt="image1" className='w-[710px] h-[300px]' />
@@ -57,15 +59,11 @@ const ViewGig = ({data,userId,review}) => {
                                     <input type="radio" onClick={()=>setPlan('basic')} name="plan" value='basic' id="" />
                                 </div>
                             </div>
+                            <h1 className='font-medium ml-8 text-gray-500'>{basic.planname}</h1>
                             <ol className=' font-medium ml-8 text-gray-500'>
-                                <li>web development</li>
-                                <li>web development</li>
-                                <li>web development</li>
-                                <li>web development</li>
-                                <li>web development</li>
-
+                                {basic.description}
                             </ol>
-                            <p className='ml-8 my-1 font-bold text-[17px] text-purple-700'>Revisions <span>{basic.revision}</span></p>
+                            <p className='ml-8 my-1 font-bold text-[17px] text-purple-700'>Delivery <span>{basic.delivery} day</span></p>
                             <div className=' flex justify-between items-center mx-8'>
                                 <p className=' font-medium text-[22px]'>Starts</p><span className='text-[27px] font-medium '>₹{basic.price}</span>
                             </div>
@@ -78,14 +76,11 @@ const ViewGig = ({data,userId,review}) => {
                                     <input type="radio" onClick={()=>setPlan("standard")} name="plan" value='standard' id="" />
                                 </div>
                             </div>
+                            <h1 className='font-medium ml-8 text-gray-500'>{standard.planname}</h1>
                             <ol className=' font-medium ml-8 text-gray-500'>
-                                <li>web development</li>
-                                <li>web development</li>
-                                <li>web development</li>
-                                <li>web development</li>
-                                <li>web development</li>
+                               {standard.description}
                             </ol>
-                            <p className='ml-8 my-1 font-bold text-[17px] text-purple-700'>Revisions <span>{standard.revision}</span></p>
+                            <p className='ml-8 my-1 font-bold text-[17px] text-purple-700'>Delivery <span>{standard.delivery} day</span></p>
                             <div className=' flex justify-between items-center mx-8'>
                                 <p className=' font-medium text-[22px]'>Starts</p><span className='text-[27px] font-medium '>₹{standard.price}</span>
                             </div>
@@ -98,14 +93,11 @@ const ViewGig = ({data,userId,review}) => {
                                     <input type="radio" onClick={()=>setPlan('premium')} name="plan" value='premium' id="" />
                                 </div>
                             </div>
+                        <h1 className='font-medium ml-8 text-gray-500'>{premium.planname}</h1>
                             <ol className=' font-medium ml-8 text-gray-500'>
-                                <li>web development</li>
-                                <li>web development</li>
-                                <li>web development</li>
-                                <li>web development</li>
-                                <li>web development</li>
+                                {premium.description}
                             </ol>
-                            <p className='ml-8 my-1 font-bold text-[17px] text-purple-700'>Revisions <span>{premium.revision}</span></p>
+                            <p className='ml-8 my-1 font-bold text-[17px] text-purple-700'>Delivery <span>{premium.delivery}day</span></p>
                             <div className=' flex justify-between items-center mx-8'>
                                 <p className=' font-medium text-[22px]'>Starts</p><span className='text-[27px] font-medium '>₹{premium.price}</span>
                             </div>
@@ -120,14 +112,14 @@ const ViewGig = ({data,userId,review}) => {
                 <div className='pl-1 col-span-2 h-[920px] bg-white scrollbar overflow-hidden overflow-x-hidden overflow-y-scroll' >
                     <Review sellerId={sellerId} userId={userId} review={review}/>
                 </div>
-                <div className=' col-span-7 py-2 bg-white'>
+                {/* <div className=' col-span-7 py-2 bg-white'>
                     <h1 className=' text-lg font-bold text-purple-700 mx-12'>Similar Service</h1>
                     <div className='flex items-center'>
                         <div className='flex items-center h-52'>< GrFormPrevious size={30} /></div>
                         <div className=' card flex items-certer grow scrollbar-none overflow-x-scroll h-52'><SliderCard /></div>
                         <div className='flex items-center h-52'>< GrFormNext size={30} /></div>
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     )

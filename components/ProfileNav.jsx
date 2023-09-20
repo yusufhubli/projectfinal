@@ -13,7 +13,7 @@ import Change,{Change2,Change3,Change4} from './Change'
 import MyComponent from './test'
 import { SellerOrders } from './Orders'
 
-const ProfileNav =({userId,card,orders}) => {
+const ProfileNav =({userId,card,orders,pay}) => {
     //const card = await getCard()
    // const userId = await getUserId()
     const usercard =card.filter((x)=>x.sellerId._id === userId)
@@ -45,8 +45,8 @@ const ProfileNav =({userId,card,orders}) => {
             <div className='w-full h-[200px] flex flex-wrap'>
             {/* {usercard.map((e)=><Card data={e}/>)} */}
             {change == "1" && usercard.map(e=><UserCard userId={userId} card={e}/>)}
-            {change == "2" && order.map(e=><SellerOrders userId={userId} orders={e}/>)}
-            {change == "3" && <Change3/>}
+            {change == "2" && order.map(e=><div className=' w-[810px] h-[400px] overflow-hidden overflow-y-scroll scrollbar-none'><SellerOrders userId={userId} orders={e}/></div>)}
+            {change == "3" && <Change3 payment={pay}/>}
             {change == "4" && <NewGig userId={userId}/>}
                 </div>
         </div>

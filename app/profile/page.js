@@ -6,6 +6,7 @@ import React from 'react'
 import { getCard } from '../buyer/page'
 import { getUserId } from '@/helpers/getuserId'
 import axios from 'axios'
+import Navbar from '@/components/Navbar'
 
 export const getOrders = async()=>{
   const orderall = await axios.get("http://localhost:3000/api/order",{cache:'no-cache'})
@@ -25,24 +26,35 @@ export const getUser = async()=>{
   return user
 }
 
+export const getPay =async()=>{
+  const pay = await axios.get("http://localhost:3000/api/pay",{next:{revalidate:10}})
+  const userId = await getUserId()
+ // console.log(userall.data)
+  const payment = pay.data.filter((x)=>x.sellerId === userId)
+  return payment
+}
 const page = async() => {
   const order = await getOrders()
   const user  = await getUser()
   const userId = await getUserId()
   const card = await getCard()
+  const payment = await getPay()
  // console.log("profile page",order)
   return (
+    <>
+    <Navbar/>
     <div className='pt-20 h-[1000px] grid grid-cols-7 gap-2'>
       <div className=' col-span-2 bg-gray-100'>
       <Profile user={user}/>
-      <Skill/>
+      {/* <Skill/> */}
       </div>
 
       <div className=' col-span-5 bg-gray-100'>
-      <ProfileNav userId={userId} card={card} orders={order}/>
+      <ProfileNav userId={userId} card={card} orders={order} pay={payment}/>
       </div>
       
     </div>
+    </>
   )
 }
 

@@ -15,6 +15,7 @@ const Login = () => {
         try {
             const res = await axios.post("/api/user/login",user)
             console.log("signup success",res.data)
+            alert(res.data.message)
             router.push("/buyer")
         } catch (error) {
             console.error(error)
@@ -32,9 +33,9 @@ const Login = () => {
                  value={user.password}
                  onChange={(e)=>setUser({...user,password:e.target.value})}
                 placeholder='Password' type="text" />
-                <div className='flex items-center'>
+                {/* <div className='flex items-center'>
                     <input type="checkbox" name="" id="" className='ml-2' /><small className=' text-gray-600 m-1'>  I agree terms &conditions </small>
-                </div>
+                </div> */}
                 <div className='flex justify-center'> 
                     <button className='flex text-lg w-80 justify-center rounded-full py-1 text-white bg-purple-700 font-bold hover:bg-purple-600 my-4 shadow-2xl '
                      onClick={onLogin}>Login</button>

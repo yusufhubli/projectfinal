@@ -39,6 +39,7 @@ const Forms = ({user,userId}) => {
     console.log(userId)
           const res = await axios.post(`http://localhost:3000/api/profile/${userId}`,data)
           console.log(res.data)
+          alert(res.data.message)
         
     }
   return (

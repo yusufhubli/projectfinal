@@ -3,14 +3,13 @@ import React from 'react'
 
 const AdminNav = () => {
   return (<>
-    <div className=' w-full h-16 flex items-center justify-between px-10 bg-white'>
+    <div className=' w-full h-16 flex fixed z-10 items-center justify-between px-10 bg-white border-b-2 border-purple-200'>
       <h1 className=' text-2xl font-bold text-purple-700'>Admin</h1>
       <div className='flex w-[600px] justify-between items-center px-10'>
         <Link className=' font-bold text-sm text-purple-700' href={'/admin/users'}>User</Link>
         <Link className=' font-bold text-sm text-purple-700' href={'/admin/cards'}>Cards</Link>
         <Link className=' font-bold text-sm text-purple-700' href={'/admin/orders'}>Orders</Link>
         <Link className=' font-bold text-sm text-purple-700' href={'/admin/earning'}>Earning</Link>
-        <Link className=' font-bold text-sm text-purple-700' href={'/'}>Add Admin</Link>
         <Link className=' font-bold text-sm text-purple-700' href={'/'}>Logout</Link>
       </div>
 

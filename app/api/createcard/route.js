@@ -20,7 +20,7 @@ export async function POST(req){
           sellerId
         });
        // console.log(newGig)
-        return NextResponse.json({meassage:"new user created"})
+        return NextResponse.json({message:"new card created"})
     } catch (error) {
         return NextResponse.json({error:error.message})
     }

@@ -1,6 +1,7 @@
 export const revalidate =10
 
 import Card from '@/components/Card'
+import Navbar from '@/components/Navbar'
 import React from 'react'
 
 export const getCard = async()=>{
@@ -13,9 +14,12 @@ const page = async() => {
    const card = await getCard()
    //console.log(card)
     return (
+      <>
+      <Navbar/>
     <div className=' pt-20 w-full flex flex-wrap'>
       {card.map((e)=><Card data={e}/>)}
     </div>
+    </>
   )
 }
 
