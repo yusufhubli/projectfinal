@@ -39,18 +39,19 @@ const page = async() => {
   const userId = await getUserId()
   const card = await getCard()
   const payment = await getPay()
+ 
  // console.log("profile page",order)
   return (
     <>
     <Navbar/>
-    <div className='pt-20 h-[1000px] grid grid-cols-7 gap-2'>
-      <div className=' col-span-2 bg-gray-100'>
+    <div className='pt-16 h-auto py-5 grid grid-cols-7 gap-2'>
+      {/* <div className=' col-span-7 bg-gray-100'>
       <Profile user={user}/>
-      {/* <Skill/> */}
-      </div>
+      {/* <Skill/> 
+      </div> */}
 
-      <div className=' col-span-5 bg-gray-100'>
-      <ProfileNav userId={userId} card={card} orders={order} pay={payment}/>
+      <div className=' col-span-7 bg-gray-100'>
+      <ProfileNav userId={userId} user={user} card={card} orders={order} pay={payment}/>
       </div>
       
     </div>

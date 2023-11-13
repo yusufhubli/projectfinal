@@ -1,10 +1,11 @@
-'use server'
+
 import mongoose from 'mongoose';
 
 
     // track the connection
     
     export const connectToDB = async () => {
+      'use server'
       mongoose.set('strictQuery', true);
     
     

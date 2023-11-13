@@ -22,7 +22,7 @@ import Loading from './loading'
 const page = () => {
   return (
     <div className='pt-16 h-[600px]'>
-       <Register/>
+      <Messages/>
     </div>
   )
 }

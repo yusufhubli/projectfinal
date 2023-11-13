@@ -5,24 +5,24 @@ import { AiFillStar } from 'react-icons/ai'
 
 import axios from 'axios'
 const Orders = ({ orders }) => {
-    const {_id, cardname, client, freelancer, createdAt,deliveredfile, plan, price,delivery, title, description, status } = orders
+    const { _id, cardname, client, freelancer, createdAt, deliveredfile, plan, price, delivery, title, description, status } = orders
     const { filename, content } = orders.sendedfile
     console.log(freelancer.name)
-    const [pay,setPay] = useState({
-        clientId:client._id,
-        orderId:_id,
-        sellerId:freelancer._id,
-        price:price,
-        commission:price/10,
-        status:true,
-       
+    const [pay, setPay] = useState({
+        clientId: client._id,
+        orderId: _id,
+        sellerId: freelancer._id,
+        price: price,
+        commission: price / 10,
+        status: true,
+
 
     })
 
-     //console.log(pay)
-    const handlePayment = async(id)=>{
-        console.log("pay",pay)
-        const res = await axios.post("http://localhost:3000/api/pay",pay)
+    //console.log(pay)
+    const handlePayment = async (id) => {
+        console.log("pay", pay)
+        const res = await axios.post("http://localhost:3000/api/pay", pay)
         console.log(res.data)
         alert(res.data)
     }
@@ -45,7 +45,7 @@ const Orders = ({ orders }) => {
         }
     };
     return (
-        <div className=' w-[800px] h-auto p-3 bg-white shadow-md shadow-purple-200 rounded-md m-2'>
+        <div className=' w-[800px] h-auto p-3 bg-red-300 shadow-md shadow-purple-200 rounded-md m-2'>
             {/** seller info */}
             <div className='flex justify-between items-center mx-6 my-2 border-b-2 border-purple-700 pb-4 px-2 '>
                 <div className=' flex items-center w-80'>
@@ -64,7 +64,7 @@ const Orders = ({ orders }) => {
             {/** more info */}
             <div className='mx-6 my-2 pb-2 border-b-2 border-purple-700'>
                 <h1 className=' font-bold text-xl'>{cardname}</h1>
-            <h1 className=' font-bold text-xl'> Title: {title}</h1>
+                <h1 className=' font-bold text-xl'> Title: {title}</h1>
                 <section className=' text-[17px] font-medium text-gray-500 py-2 border-b border-gray-600'>Description: {description}</section>
                 <div className=' text-[15px] font-medium text-black flex justify-between py-1 px-10'><h1>Order Date</h1><h1>{createdAt}</h1></div>
                 <div className=' text-[15px] font-medium text-black flex justify-between py-1 px-10'><h1>status</h1><h1>{status === false ? <b className=' text-green-500'>Active</b> : <b className=' text-purple-700'>Completed</b>}</h1></div>
@@ -94,7 +94,7 @@ const Orders = ({ orders }) => {
             <div className=' flex justify-between items-center mx-8 '>
                 <span className=' font-bold text-lg text-black'>Duration {delivery} days</span>
                 <span className=' text-sm font-bold py-1 px-5 rounded-sm shadow-sm shadow-purple-500  text-green-500'>{status === false ? <b>Active</b> : <b className='text-sm font-bold text-gray-700 '>Completed</b>}</span>
-               {status === true ?<></>:<> {deliveredfile && <button onClick={()=>handlePayment(_id)} className=' px-5 py-1 text-sm my-1 ml-5 rounded-md text-white bg-purple-700 hover:bg-purple-500 shadow-sm shadow-gray-400'>Done</button>}</>}
+                {status === true ? <></> : <> {deliveredfile && <button onClick={() => handlePayment(_id)} className=' px-5 py-1 text-sm my-1 ml-5 rounded-md text-white bg-purple-700 hover:bg-purple-500 shadow-sm shadow-gray-400'>Done</button>}</>}
             </div>
 
         </div>
@@ -102,13 +102,13 @@ const Orders = ({ orders }) => {
 }
 
 export const SellerOrders = ({ userId, orders }) => {
-    const [send,setSend] =useState({
-        deliveredfile:{
-            filename:'',
-            content:''
+    const [send, setSend] = useState({
+        deliveredfile: {
+            filename: '',
+            content: ''
         }
     })
-    const { _id, cardname, client, freelancer, deliveredfile, createdAt, plan, price,delivery, title, description, status } = orders
+    const { _id, cardname, client, freelancer, deliveredfile, createdAt, plan, price, delivery, title, description, status } = orders
     const { filename, content } = orders.sendedfile
     console.log(freelancer.name)
     // console.log(orders)
@@ -150,50 +150,54 @@ export const SellerOrders = ({ userId, orders }) => {
         }
     };
 
-    const handleSubmit = async(id)=>{
+    const handleSubmit = async (id) => {
         console.log(send)
-        const res = await axios.put(`http://localhost:3000/api/order/${id}`,send)
+        const res = await axios.put(`http://localhost:3000/api/order/${id}`, send)
         console.log(res)
-      }
+    }
 
 
     return (
-
-        
-        <div className=' w-[800px] h-auto p-3 bg-white shadow-md shadow-purple-200 rounded-md m-2'>
+        <div className=' w-[330px] sd:w-[500px] md:w-[700px] lg:w-[800px] h-auto my-3 mx-auto p-3 bg-white border border-purple-300 '>
             {/** seller info */}
-            <div className='flex justify-between items-center mx-6 my-2 border-b-2 border-purple-700 pb-4 px-2 '>
-                <div className=' flex items-center w-80'>
-                    <Image className=' h-20 w-20 rounded-full border border-purple-700 ml-1' src={client.image} width={60} height={60} />
-                    <div className='ml-4'>
-                        <h6 className='text-xl font-bold text-gray-600'>{client.name}</h6>
-                        <div className='flex text-yellow-500'><AiFillStar size={16} /><AiFillStar size={16} /><AiFillStar size={16} /><AiFillStar size={16} /><AiFillStar size={16} /></div>
-                        <h1 className=' text-yellow-500 text-[18px] font-bold flex items-center'> 5.0 <span className=' text-[12px] pt-1 text-gray-600 font-medium'> (40)</span></h1>
+            <div className='flex justify-between items-center my-3 px-2 border-b-[1px] border-purple-700 pb-4 '>
+                <div className=' flex items-center grow'>
+                    <Image className=' h-12 w-12 rounded-full border border-purple-700 ml-1' src={client.image} width={60} height={60} />
+                    <div className='ml-3'>
+                        <h6 className='text-sm font-bold text-gray-600 capitalize'>{client.name}</h6>
+                        <div className=' flex items-center'>
+                            <div className='flex items-center pt-[1.5px] mr-[2px] text-xs text-yellow-500'><AiFillStar /><AiFillStar /><AiFillStar /><AiFillStar /><AiFillStar /></div>
+                            <h1 className=' text-yellow-500 text-sm font-bold flex items-center'> 5.0 <span className=' text-[10px] pt-[2px] ml-[1px] text-gray-600 font-medium'> (40)</span></h1>
+                        </div>
                     </div>
                 </div>
                 <div>
-                    <h1 className=' font-bold text-xl text-purple-700'>{plan} plan</h1>
-                    <h1 className=' text-4xl font-bold'>₹{price}</h1>
+                    <h1 className=' font-medium text-sm text-purple-700 capitalize'>{plan} plan</h1>
+                    <h1 className=' text-xl font-bold'>₹{price}</h1>
                 </div>
             </div>
             {/** more info */}
-            <div className='mx-6 my-2 pb-2 border-b-2 border-purple-700'>
-            <h1 className=' font-bold text-xl'>{cardname}</h1>
-            <h1 className=' font-bold text-xl'>Title: {title}</h1>
-                <section className=' text-[17px] text-gray-500 py-2 border-b border-gray-600'>Description: {description}</section>
-                <div className=' text-[15px] font-medium text-black flex justify-between py-1 px-10'><h1 className=''>Order Date</h1><h1>{createdAt}</h1></div>
-                <div className=' text-[15px] font-medium text-black flex justify-between py-1 px-10'><h1 className=''>status</h1><h1>{status === false ? <b className=' text-green-500'>Active</b> : <b className=' text-purple-700'>Completed</b>}</h1></div>
-                <div className=' text-[15px] font-medium text-black flex justify-between py-1 px-10'><h1 className=''>Sended File</h1>
+            <div className=' my-4 pb-2 border-b-[1px] border-purple-700 mx-2'>
+                <h1 className=' font-bold text-lg capitalize'>{cardname}</h1>
+                <h1 className=' font-medium text-[17px]'>Title: {title}</h1>
+                <section className=' text-[14px] text-gray-700 py-3 border-b-[1px] my-1 border-gray-600'>Description: {description}</section>
+                <div className=' text-[15px] font-medium text-black flex justify-between mt-3 py-1 px-2'><h1 className=''>Order Date</h1><h1>{createdAt}</h1></div>
+                <div className=' text-[15px] font-medium text-black flex justify-between py-1 px-2'><h1 className=''>status</h1><h1>{status === false ? <b className=' text-green-500'>Active</b> : <b className=' text-purple-700'>Completed</b>}</h1></div>
+                <div className=' text-[15px] font-medium text-black flex justify-between py-1 px-2'><h1 className=''>Sended File</h1>
                     <div className=' flex items-center'>
                         <h1 className=' text-sm '>{filename}</h1><button onClick={() => downloadFile(_id)} className=' px-5 py-1 text-sm my-1 ml-5 rounded-md text-white bg-purple-700 hover:bg-purple-500 shadow-sm shadow-gray-400'>Download</button>
                     </div>
                 </div>
-                <div className='text-[15px] font-medium text-black flex justify-between items-center py-1 px-10'><h1 className=''>Deliver file <small className=' font-thin'>(single file zip or other files)</small></h1>
-                    {deliveredfile ? <h1 className=' font-bold text-purple-700'>File Delivered</h1> 
-                    :<div className=' flex items-center'>
-                        <input type="file" className='-mr-16' onChange={handleFileChange} name="" id="" />
-                        <button onClick={() => handleSubmit(_id)} className=' px-5 py-1 text-sm my-1 rounded-md text-white bg-purple-700 hover:bg-purple-500 shadow-sm shadow-gray-400'>Send</button>
-                    </div>}
+                <div className='text-[15px] font-medium text-black flex justify-between items-center py-1 px-2'>
+                    <div>
+                    <h1 className=' -mb-1'>Deliver file </h1>
+                    <small className=' font-thin'>(single file zip or other files)</small>
+                    </div>
+                    {deliveredfile ? <h1 className=' font-bold text-purple-700'>File Delivered</h1>
+                        : <div className=' flex items-center hidden'>
+                            <input type="file" className='-mr-16' onChange={handleFileChange} name="" id="" />
+                            <button onClick={() => handleSubmit(_id)} className=' px-5 py-1 text-sm my-1 rounded-md text-white bg-purple-700 hover:bg-purple-500 shadow-sm shadow-gray-400'>Send</button>
+                        </div>}
                 </div>
                 {/* <div className=' ml-5 text-[17px] font-medium text-gray-600'>
                     <h1 className='py-1'>Orderd date</h1>
@@ -216,14 +220,14 @@ export const SellerOrders = ({ userId, orders }) => {
             </div>
 
             {/** more view */}
-            <div className=' flex justify-between items-center mx-8 '>
-                <span className=' font-bold text-lg text-black'>Duration {delivery} days</span>
-                <span className=' text-sm font-bold py-1 px-5 rounded-sm shadow-sm shadow-purple-500  text-green-500'>{status === false ?<b> Active</b> : <b className='text-sm font-bold text-gray-700 '>Completed</b>}</span>
-            
+            <div className=' flex justify-between items-center mx-3 '>
+                <span className=' font-medium text-[16px] text-black'>Duration {delivery} days</span>
+                <span className=' text-sm font-bold py-1 px-5 rounded-sm shadow-sm shadow-purple-500  text-green-500'>{status === false ? <b> Active</b> : <b className='text-sm font-bold text-gray-700 '>Completed</b>}</span>
+
             </div>
 
         </div>
-        
+
     )
 }
 

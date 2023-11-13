@@ -22,9 +22,10 @@ const Review = ({ sellerId, userId, review }) => {
   }
 
   return (
-    <div className='w-full h-auto m-2 bg-white ' >
+    <div className='w-full h-auto py-2 bg-white' >
       <h1 className=' font-bold text-2xl text-purple-700 py-2 px-5'>Reviews</h1>
-      <div className='w-full h-auto p-2'>
+      <div className=' md:flex lg:block'>
+      <div className='w-full md:w-[50%] md:py-10 lg:py-3 h-auto p-2'>
         <div className='flex justify-between items-center mx-4'>
           <h1 className=' text-black text-xl font-medium '>Rating</h1>
           <h1 className=' text-yellow-400 text-xl font-bold flex items-center'><AiFillStar size={22} /> 5.0 <span className=' text-sm text-gray-600 font-medium'> (40)</span></h1>
@@ -49,7 +50,7 @@ const Review = ({ sellerId, userId, review }) => {
             <div className='flex text-yellow-500'>
               <AiFillStar size={17} /><AiFillStar size={17} /><AiFillStar size={17} /><AiFillStar size={17} /><AiOutlineStar size={17} />
             </div>
-            <div className=' w-40 mx-1'>
+            <div className=' w-40 mx-1 '>
               <div className='w-[160px] h-[10px] bg-gray-300 rounded-full '>
                 <div className='w-[130px] h-[10px] bg-yellow-500 rounded-full relative top-0'></div>
               </div>
@@ -105,30 +106,35 @@ const Review = ({ sellerId, userId, review }) => {
         </div>
       </div>
       {/* add review */}
-      <div className='mx-2 my-1 border-b-2 border-purple-700'>
+      <div className='mx-2 my-1'>
         {/* <button className=' text-[15px] font-bold py-1 px-5 rounded-md bg-purple-700 text-white m-2'>Add a Review</button> */}
         {!clientReview ? <div className='mx-2 bg-white pl-4'>
-          <h1 className=' font-bold text-xl'>Rate your <span className=' font-extrabold text-purple-700'>Seller</span></h1>
-          <div className=' flex my-1 text-yellow-500'>
+          <div className=' md:flex lg:block my-1 text-yellow-500'>
+          <h1 className=' text-black font-bold text-lg md:mr-3'>Rate your <span className=' font-extrabold text-purple-700'>Seller</span></h1>
+            <div className=' flex'>
             <AiOutlineStar size={25} /><AiOutlineStar size={25} /><AiOutlineStar size={25} /><AiOutlineStar size={25} /><AiOutlineStar size={25} />
+            </div>
+            
           </div>
           <input type="text" onChange={e => setReview({ ...review1, rating: e.target.value })} className=' outline-none border-2 border-purple-300 rounded-md placeholder:pl-2' id="" />
-          <h1 className=' font-bold text-xl my-2'>Review your <span className=' font-extrabold text-purple-700'>Seller</span></h1>
-          <textarea onChange={e => setReview({ ...review1, comment: e.target.value })} id="" cols="35" rows="5" className=' outline-none border-2 border-purple-300 rounded-md placeholder:pl-2' placeholder='Write review' /><br />
-          <button onClick={handleSubmit} className=' text-[17px] font-medium py-1 px-[62px] my-2 rounded-md bg-purple-700 text-white shadow-md shadow-gray-400 flex items-center'>Send the Review
+          <h1 className=' font-bold text-lg my-2'>Review your <span className=' font-extrabold text-purple-700'>Seller</span></h1>
+          <textarea onChange={e => setReview({ ...review1, comment: e.target.value })} id="" cols="37" rows='3' className=' outline-none border-2 border-purple-300 rounded-md placeholder:pl-2' placeholder='Write review' /><br />
+          <button onClick={handleSubmit} className=' text-[17px] font-medium py-1 px-[66px] my-2 rounded-md bg-purple-700 text-white shadow-md shadow-gray-400 flex items-center'>Send the Review
             <AiFillStar size={20} className='ml-2 pt-1' /></button>
         </div> : 
         <button className=' text-[15px] font-bold py-1 px-5 hidden rounded-md bg-purple-700 text-white m-2'>update Review</button>}
       </div>
+      </div>
+     
       {/* reviews */}
       {review.map(rev =>
-        <div className=' bg-purple-50 shadow shadow-purple-300 mx-2 my-4' >
+        <div className=' mx-2 my-1' >
           <div>
-            <div className='w-full flex items-center border-b  border-purple-700 py-3'>
-              <img src={rev.clientId.image} alt='image' className='ml-3 w-12 h-12 rounded-full border border-purple-700' />
-              <h1 className=' text-[16px] font-bold ml-4'>{rev.clientId.name}</h1>
+            <div className='w-full flex items-center border-b-[1.5px]  border-purple-700 py-3'>
+              <img src={rev.clientId.image} alt='image' className='ml-3 w-8 h-8 rounded-full border border-purple-700' />
+              <h1 className=' text-[14px] font-bold ml-2 capitalize'>{rev.clientId.name}</h1>
             </div>
-            <p className='p-4 text-sm text-gray-600'>{rev.comment}</p>
+            <p className='p-2 font-medium text-sm text-gray-600'>{rev.comment}</p>
           </div>
         </div>
       )}

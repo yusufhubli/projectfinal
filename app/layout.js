@@ -12,9 +12,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="">
+      <body className=" ">
         <Suspense fallback={<Loading/>}>
-          {/* <Navbar /> */}
+          <Navbar />
           {children}
           <Footer />
         </Suspense>

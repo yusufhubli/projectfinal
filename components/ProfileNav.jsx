@@ -9,11 +9,11 @@ import Card, { UserCard } from './Card'
 //import { getCard } from '@/app/buyer/page'
 //import { getUserId } from '@/helpers/getuserId'
 //import { SiVelog } from 'react-icons/si'
-import Change,{Change2,Change3,Change4} from './Change'
-import MyComponent from './test'
+import { Change3 } from './Change'
 import { SellerOrders } from './Orders'
+import Profile from './Profile'
 
-const ProfileNav =({userId,card,orders,pay}) => {
+const ProfileNav =({userId,user,card,orders,pay}) => {
     //const card = await getCard()
    // const userId = await getUserId()
     const usercard =card.filter((x)=>x.sellerId._id === userId)
@@ -23,31 +23,36 @@ const ProfileNav =({userId,card,orders,pay}) => {
     
     console.log(change)
     return (
-        <div className='w-[900px] h-auto'>
-            <div className='flex item-center h-11  my-2 rounded-md shadow-sm shadow-purple-400 bg-white'>
-                <div className='ml-28 flex items-center text-purple-700'>
-                    <AiFillCreditCard size={20} />
-                    <button onClick={()=>setChange('1')} className=' ml-1 text-sm font-bold '>My Gigs</button>
+        <div className='w-full h-auto'>
+            <div className='flex item-center justify-around h-12 md:h-14  my-2 px-3 border border-purple-300 bg-white'>
+                <div className='flex items-center text-purple-700'>
+                    <AiFillCreditCard size={20} className=' hidden md:block' />
+                    <button onClick={()=>setChange('1')} className=' ml-1 text-[13px] text-xs md:text-sm font-medium md:font-bold '>Profile</button>
                 </div>
-                <div className='ml-28 flex items-center text-purple-700'>
-                    <MdWork size={20} />
-                    <button onClick={()=>setChange('2')} className='ml-1 text-sm font-bold text-purple-700'>Orders</button>
+                <div className='flex items-center text-purple-700'>
+                    <AiFillCreditCard size={20} className=' hidden md:block' />
+                    <button onClick={()=>setChange('2')} className=' ml-1 text-[13px] text-xs md:text-sm font-medium md:font-bold '>My Gigs</button>
                 </div>
-                <div className='ml-28 flex items-center text-purple-700'>
-                    <IoWalletSharp size={20} />
-                    <button onClick={()=>setChange('3')} className='ml-1 text-sm font-bold text-purple-700'>Wallet</button>
+                <div className='flex items-center text-purple-700'>
+                    <MdWork size={20} className=' hidden md:block' />
+                    <button onClick={()=>setChange('3')} className='ml-1 text-[13px] text-xs md:text-sm font-medium md:font-bold text-purple-700'>Orders</button>
                 </div>
-                <div className='ml-28 flex items-center text-purple-700'>
-                    <IoIosCreate size={20} />
-                    <button onClick={()=>setChange('4')} className='ml-1 text-sm font-bold text-purple-700'>New Gig</button>
+                <div className='flex items-center text-purple-700'>
+                    <IoWalletSharp size={20} className=' hidden md:block' />
+                    <button onClick={()=>setChange('4')} className='ml-1 text-[13px] text-xs md:text-sm font-medium md:font-bold text-purple-700'>Wallet</button>
+                </div>
+                <div className='flex items-center text-purple-700'>
+                    <IoIosCreate size={20} className=' hidden md:block' />
+                    <button onClick={()=>setChange('5')} className='ml-1 text-[13px] text-xs md:text-sm font-medium md:font-bold text-purple-700'>New Gig</button>
                 </div>
             </div>
-            <div className='w-full h-[200px] flex flex-wrap'>
+            <div className='w-full h-auto flex flex-wrap justify-center'>
             {/* {usercard.map((e)=><Card data={e}/>)} */}
-            {change == "1" && usercard.map(e=><UserCard userId={userId} card={e}/>)}
-            {change == "2" && order.map(e=><div className=' w-[810px] h-[400px] overflow-hidden overflow-y-scroll scrollbar-none'><SellerOrders userId={userId} orders={e}/></div>)}
-            {change == "3" && <Change3 payment={pay}/>}
-            {change == "4" && <NewGig userId={userId}/>}
+            {change == "1" && <Profile user={user}/>}
+            {change == "2" && usercard.map(e=><div className=' bg-red-200'><UserCard card={e}/></div>)}
+            {change == "3" && order.map(e=><div className='block'><SellerOrders userId={userId} orders={e}/></div>)}
+            {change == "4" && <Change3 payment={pay}/>}
+            {change == "5" && <NewGig userId={userId}/>}
                 </div>
         </div>
     )
